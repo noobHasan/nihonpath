@@ -231,7 +231,6 @@ function renderWritingTask(t){
     <article class="card writingTask">
       <div class="meta" style="font-weight:700">${E(t.type)} • ${m.completed?'Practiced':'New'}</div>
       <h3 style="font-size:18px;margin:6px 0 10px">${E(t.prompt)}</h3>
-      ${t.type==='kana-trace'?`<div class="writingTraceTarget jp" aria-hidden="true">${E(t.target)}</div>`:''}
       ${body}
       <div id="writing-result-${t.id}" class="writingResult" aria-live="polite"></div>
       <div id="writing-analysis-${t.id}" class="writingBreakdown"></div>

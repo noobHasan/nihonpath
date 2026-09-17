@@ -150,20 +150,22 @@ button {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 4px 8px 12px;
+  gap: 10px;
+  padding: 4px 6px 14px;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 4px;
 }
 
 .mark {
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-md);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
   background-color: var(--color-primary);
   color: #ffffff;
   display: grid;
   place-items: center;
   font-weight: 800;
-  font-size: 20px;
+  font-size: 18px;
   font-family: var(--font-jp);
   box-shadow: var(--shadow-sm);
   flex-shrink: 0;
@@ -175,17 +177,20 @@ button {
 }
 
 .brandTitle {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 800;
   letter-spacing: 0.08em;
   color: var(--color-text);
-  line-height: 1.2;
+  line-height: 1.1;
 }
 
 .brandSubtitle {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--color-text-secondary);
-  font-weight: 500;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 2px;
 }
 
 .level {
@@ -293,7 +298,7 @@ button {
 }
 
 .menuBtn {
-  display: none;
+  display: none !important;
   width: 40px;
   height: 40px;
   border-radius: var(--radius-md);
@@ -1009,6 +1014,30 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   margin-top: 10px;
 }
 
+.audioBtn {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.audioBtnIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.speakingSectionLabel {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-tertiary);
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
 .audioStatus, .speakingStatus {
   margin-top: 8px;
   color: var(--color-text-secondary);
@@ -1179,18 +1208,21 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 /* Dialogue / Conversations */
 .dialog {
   display: grid;
-  grid-template-columns: 80px 1fr;
-  gap: 12px;
-  padding: 12px 0;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 16px;
+  padding: 14px 0;
   border-bottom: 1px dashed var(--color-border);
+  align-items: start;
 }
 
 .speaker {
-  font-size: 11px;
-  color: var(--color-primary);
-  font-weight: 850;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--color-indigo);
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.4;
+  padding-top: 2px;
 }
 
 .dialog .jp {
@@ -1447,7 +1479,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   }
 
   .menuBtn {
-    display: grid;
+    display: inline-flex !important;
   }
 
   .top {

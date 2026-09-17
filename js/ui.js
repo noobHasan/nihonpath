@@ -1,5 +1,6 @@
 function dash(){
-  let s=stats(),l=lessons[s.day-1],due=Object.values(state.quiz.by||{}).filter(x=>x.wrong>x.correct).length;
+  let s=stats(),l=lessons[s.day-1],due=Object.values(state.quiz.by||{}).filter(x=>x.wrong>x.correct).length,
+      lessonFocus=(l && (l.focus || l.subtitle || (l.objectives && l.objectives[0]))) || '';
   document.getElementById('dashboard').innerHTML=`
     <div class="eyebrow">Your Japanese path</div>
     <h1 class="title">Welcome back.</h1>
@@ -9,7 +10,7 @@ function dash(){
         <div>
           <span class="badge">DAY ${s.day} OF 90</span>
           <h2>${E(l.title)}</h2>
-          <p>${E(l.focus)}</p>
+          <p>${E(lessonFocus)}</p>
           <div class="tags">
             <span class="tag">${E(l.phase)}</span>
             <span class="tag">10–25 min</span>

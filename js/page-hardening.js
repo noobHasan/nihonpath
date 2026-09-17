@@ -6,7 +6,8 @@ function dash(){
       weakCount=Object.values(state.quiz.by||{}).filter(function(x){return x.wrong>x.correct;}).length,
       speakingCount=activityCount(state.speakingPractice),
       writingCount=activityCount(state.writingPractice),
-      assessments=Object.values(state.assessmentHistory||{}).reduce(function(n,x){return n+(Array.isArray(x)?x.length:0);},0);
+      assessments=Object.values(state.assessmentHistory||{}).reduce(function(n,x){return n+(Array.isArray(x)?x.length:0);},0),
+      lessonFocus = (l && (l.focus || l.subtitle || (l.objectives && l.objectives[0]))) || '';
   
   document.getElementById('dashboard').innerHTML=`
     <div class="eyebrow">Your Japanese path</div>
@@ -17,7 +18,7 @@ function dash(){
         <div>
           <span class="badge">DAY ${s.day} OF 90</span>
           <h2>${E(l.title)}</h2>
-          <p>${E(l.focus)}</p>
+          <p>${E(lessonFocus)}</p>
           <div class="tags">
             <span class="tag">${E(l.phase)}</span>
             <span class="tag">10–25 min</span>
@@ -42,8 +43,8 @@ function dash(){
     </div>
     <div class="sectionHead">
       <div>
-        <h2>Activity evidence</h2>
-        <p>Tracked practice, not proficiency percentages.</p>
+        <h2>Your practice</h2>
+        <p>A quick look at what you've practiced so far.</p>
       </div>
     </div>
     <div class="grid stats">

@@ -174,13 +174,13 @@ function renderSpeakingRecording(taskId){
 }
 
 function renderAudioControls(audioId){
-  var playIcon = typeof getIconSvg === 'function' ? getIconSvg('play', 12) + ' ' : '';
-  var slowIcon = typeof getIconSvg === 'function' ? getIconSvg('turtle', 14) + ' ' : '';
-  var stopIcon = typeof getIconSvg === 'function' ? getIconSvg('square', 10) + ' ' : '';
+  var playIcon = typeof getIconSvg === 'function' ? getIconSvg('play', 12) : '';
+  var slowIcon = typeof getIconSvg === 'function' ? getIconSvg('turtle', 14) : '';
+  var stopIcon = typeof getIconSvg === 'function' ? getIconSvg('square', 10) : '';
   return `<div class="audioControls" role="group" aria-label="Audio controls">
-    <button class="btn2 btnSecondary" style="min-height:36px;padding:6px 12px;font-size:12.5px" type="button" onclick="playAudioTarget('${audioId}','natural')">${playIcon}Listen</button>
-    <button class="btn2 btnSecondary" style="min-height:36px;padding:6px 12px;font-size:12.5px" type="button" onclick="playAudioTarget('${audioId}','slow')">${slowIcon}Slow</button>
-    <button class="btn2 btnSecondary" style="min-height:36px;padding:6px 12px;font-size:12.5px" type="button" onclick="stopAudio()">${stopIcon}Stop</button>
+    <button class="btn2 btnSecondary audioBtn" type="button" onclick="playAudioTarget('${audioId}','natural')"><span class="audioBtnIcon">${playIcon}</span><span>Listen</span></button>
+    <button class="btn2 btnSecondary audioBtn" type="button" onclick="playAudioTarget('${audioId}','slow')"><span class="audioBtnIcon">${slowIcon}</span><span>Slow</span></button>
+    <button class="btn2 btnSecondary audioBtn" type="button" onclick="stopAudio()"><span class="audioBtnIcon">${stopIcon}</span><span>Stop</span></button>
   </div>`;
 }
 
@@ -190,23 +190,29 @@ function renderSpeakingTask(task){
       hidden=task.hideTextInitially&&!meta?.completed;
   return `<article class="card speakingTask">
     <div class="meta" style="font-weight:700">${E(task.type)}</div>
-    <h3 style="font-size:18px;margin:6px 0 10px">${E(task.prompt)}</h3>
-    <div id="speaking-text-${task.id}" class="speakingModel jp" ${hidden?'hidden':''}>${E(task.modelText)}</div>
-    ${hidden?`<button id="speaking-reveal-${task.id}" class="tiny" type="button" onclick="revealSpeaking('${task.id}')">Reveal Japanese</button>`:''}
-    ${renderAudioControls(task.audioId)}
-    ${analysis?`<div class="speakingBreakdown">${renderJapaneseAnalysis(analysis)}</div>`:''}
-    <div class="speakingActions" style="margin-top:14px">
-      <button class="btn btnPrimary" style="min-height:38px;padding:8px 14px;font-size:13px" type="button" onclick="speakingRecord('${task.id}')">Start recording</button>
-      <button class="btn2 btnSecondary" style="min-height:38px;padding:8px 14px;font-size:13px" type="button" onclick="stopSpeakingRecord('${task.id}')">Stop recording</button>
+    <h3 style="font-size:18px;margin:6px 0 14px">${E(task.prompt)}</h3>
+    <div class="speakingModelBlock" style="padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--color-border)">
+      <div class="speakingSectionLabel">MODEL</div>
+      <div id="speaking-text-${task.id}" class="speakingModel jp" ${hidden?'hidden':''}>${E(task.modelText)}</div>
+      ${hidden?`<button id="speaking-reveal-${task.id}" class="tiny" type="button" onclick="revealSpeaking('${task.id}')">Reveal Japanese</button>`:''}
+      ${renderAudioControls(task.audioId)}
+      ${analysis?`<div class="speakingBreakdown">${renderJapaneseAnalysis(analysis, { showAudio: false })}</div>`:''}
     </div>
-    <div id="speaking-recording-${task.id}" class="rowActions" style="margin-top:8px"></div>
-    <div class="speakingPrivacy" style="font-size:11px;color:var(--color-text-tertiary);margin-top:8px">Your recording stays in this browser session and is not uploaded.</div>
-    <div id="speaking-status-${task.id}" class="speakingStatus" aria-live="polite">Ready for practice.</div>
-    <div class="speakingRatings" role="group" aria-label="Self-rate this practice" style="margin-top:12px;border-top:1px solid var(--color-border);padding-top:10px">
-      <span class="meta" style="margin:0">Self-rate:</span>
-      ${['Again','Okay','Comfortable'].map(function(r){
-        return `<button class="tiny" type="button" onclick="rateSpeaking('${task.id}','${r}')">${r}</button>`;
-      }).join('')}
+    <div class="speakingVoiceBlock">
+      <div class="speakingSectionLabel">YOUR VOICE</div>
+      <div class="speakingActions" style="margin-top:8px">
+        <button class="btn btnPrimary" style="min-height:38px;padding:8px 14px;font-size:13px" type="button" onclick="speakingRecord('${task.id}')">Start recording</button>
+        <button class="btn2 btnSecondary" style="min-height:38px;padding:8px 14px;font-size:13px" type="button" onclick="stopSpeakingRecord('${task.id}')">Stop recording</button>
+      </div>
+      <div id="speaking-recording-${task.id}" class="rowActions" style="margin-top:8px"></div>
+      <div class="speakingPrivacy" style="font-size:12px;color:var(--color-text-tertiary);margin-top:8px">Your recording stays in this browser session and is not uploaded.</div>
+      <div id="speaking-status-${task.id}" class="speakingStatus" aria-live="polite" style="font-size:12px;margin-top:4px">Ready for practice.</div>
+      <div class="speakingRatings" role="group" aria-label="Self-rate this practice" style="margin-top:12px;border-top:1px dashed var(--color-border);padding-top:10px">
+        <span class="meta" style="margin:0">Self-rate:</span>
+        ${['Again','Okay','Comfortable'].map(function(r){
+          return `<button class="tiny" type="button" onclick="rateSpeaking('${task.id}','${r}')">${r}</button>`;
+        }).join('')}
+      </div>
     </div>
   </article>`;
 }

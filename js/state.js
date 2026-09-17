@@ -22,7 +22,7 @@ function load(){
 
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
 
-function E(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function E(s){return String(s == null ? '' : s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
 function P(n,d){return d?Math.round(n/d*100):0}
 
