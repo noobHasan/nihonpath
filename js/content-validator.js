@@ -50,7 +50,7 @@ function validateContent() {
     ['vocabularyIds','grammarIds','kanaIds','kanjiIds','lifeModuleIds','cultureTopicIds','reviewTargets'].forEach(f => { if (!Array.isArray(l[f])) report.errors.push(`${l.id} missing array: ${f}`); });
     [['vocabularyIds','vocabulary'],['grammarIds','grammar'],['kanaIds','kana'],['kanjiIds','kanji']].forEach(([f,t]) => (l[f]||[]).forEach(id => { if (!sets[t].has(id)) report.errors.push(`${l.id} missing ${t}: ${id}`); }));
     if (l.conversationId && !sets.conversation.has(l.conversationId)) report.errors.push(`${l.id} missing conversation: ${l.conversationId}`);
-    if (l.conversationId) { const c=conversations.find(x=>x.id===l.conversationId); if (!c.title || !Array.isArray(c.lines) || !c.lines.length) report.errors.push(`${l.id} malformed conversation: ${l.conversationId}`); }
+    if (l.conversationId) { const c=conversations.find(x=>x.id===l.conversationId); if (!c || !c.title || !Array.isArray(c.lines) || !c.lines.length) report.errors.push(`${l.id} malformed conversation: ${l.conversationId}`); }
     (l.prerequisites||[]).forEach(id => { const p=lessons.find(x=>x.id===id); if (!p) report.errors.push(`${l.id} invalid prerequisite: ${id}`); else if (p.day >= l.day) report.errors.push(`${l.id} future/self prerequisite: ${id}`); });
     (l.quiz||[]).forEach(q => { if (quizIds.has(q.id)) report.errors.push(`Duplicate quiz id: ${q.id}`); quizIds.add(q.id); if (!q.id || !q.type || !q.prompt || !q.answer || !Array.isArray(q.options) || q.options.length < 2 || (q.type==='multiple-choice' && !q.options.includes(q.answer)) || new Set(q.options).size !== q.options.length) report.errors.push(`${l.id} malformed quiz question: ${q.id||'unknown'}`); (q.reviewTargets||[]).forEach(t => { if (!sets[t?.type]?.has(t?.id)) report.errors.push(`${l.id} invalid quiz review target: ${JSON.stringify(t)}`); }); });
   });
@@ -75,6 +75,84 @@ function validateContent() {
   var finalAssessment=getAssessment&&getAssessment('assessment-day090-final');if(finalAssessment){['vocabulary-orthography','grammar','sentence-composition','reading','listening','practical-communication'].forEach(k=>{if(!finalAssessment.sections.some(s=>s.kind===k&&s.questions&&s.questions.length))report.errors.push(`Day 90 missing meaningful section: ${k}`);});}
   var d86=lessons[85],d87=lessons[86];if(!d86.listeningItems||d86.listeningItems.length<5)report.errors.push('Day 86 requires at least 5 listening items');if(!d86.shadowingTasks||d86.shadowingTasks.length<3)report.errors.push('Day 86 requires at least 3 shadowing tasks');if(!d87.marathonScenarios||d87.marathonScenarios.length<5)report.errors.push('Day 87 requires at least 5 marathon scenarios');if(d87.marathonScenarios&&!['INITIATE','RESPOND','RECOVER'].every(m=>d87.marathonScenarios.some(x=>x.mode===m)))report.errors.push('Day 87 marathon must cover initiate/respond/recover');if(d86.listeningItems){report.listeningItemCount=d86.listeningItems.length;report.listeningAudioTargetCount=d86.listeningItems.filter(x=>audioSet.has(x.audioId)).length;report.listeningQuestionCount=d86.listeningItems.length;report.shadowingTaskCount=(d86.shadowingTasks||[]).length;report.itemsWithTranscriptHiddenInitially=d86.listeningItems.filter(x=>x.transcriptPolicy==='hidden-until-reveal').length;report.itemsWithNaturalRate=d86.listeningItems.filter(x=>getAudioTarget(x.audioId)&&getAudioTarget(x.audioId).naturalRate).length;report.itemsWithSlowRate=d86.listeningItems.filter(x=>getAudioTarget(x.audioId)&&getAudioTarget(x.audioId).slowRate).length;}
   var day87Ids=new Set((lessons[86]&&lessons[86].marathonScenarios||[]).map(function(s){return s.id;}));var day87Tasks=(lessons[86]&&lessons[86].speakingTasks||[]).filter(function(id){return day87Ids.has(id);}).map(function(id){return(speakingTasksV2||[]).find(function(t){return t.id===id;});}).filter(function(t){return t&&t.type==='role-play';});day87Tasks.forEach(function(t){if(!t.mode||!['INITIATE','RESPOND','RECOVER'].includes(t.mode))report.errors.push('Day 87 role-play requires explicit valid mode: '+t.id);['modelText','reading','romaji','meaning','speaker','scenario','audioId'].forEach(function(f){if(!t[f])report.errors.push('Day 87 role-play missing '+f+': '+t.id);});if(t.audioId&&(!audioSet.has(t.audioId)||getAudioTarget(t.audioId).text.trim()!==t.modelText.trim()))report.errors.push('Day 87 role-play audio mismatch: '+t.id);});report.day87LineCount=day87Tasks.length;report.day87LinesWithReading=day87Tasks.filter(function(t){return t.reading;}).length;report.day87LinesWithRomaji=day87Tasks.filter(function(t){return t.romaji;}).length;report.day87LinesWithMeaning=day87Tasks.filter(function(t){return t.meaning;}).length;report.day87LinesWithAudio=day87Tasks.filter(function(t){return t.audioId&&audioSet.has(t.audioId);}).length;
-  if(typeof conversationEnrichmentCompletedConversationIds!=='undefined'){var cc=new Set(conversationEnrichmentCompletedConversationIds),cl=conversations.filter(function(c){return cc.has(c.id);}).flatMap(function(c){return c.lines||[];}),ccounts={};cl.forEach(function(l){ccounts[l.classification]=(ccounts[l.classification]||0)+1;});report.completedConversationCount=cc.size;report.completedLineCount=cl.length;report.uniqueCompletedLineIdCount=new Set(cl.map(function(l){return l.id;})).size;report.linesWithExactlyOneClassification=cl.filter(function(l){return typeof l.classification==='string'&&['FORMAL GRAMMAR','PRODUCTIVE FIXED PHRASE','RECOGNITION PHRASE'].includes(l.classification);}).length;report.formalGrammarCount=ccounts['FORMAL GRAMMAR']||0;report.productiveFixedPhraseCount=ccounts['PRODUCTIVE FIXED PHRASE']||0;report.recognitionPhraseCount=ccounts['RECOGNITION PHRASE']||0;if(report.formalGrammarCount+report.productiveFixedPhraseCount+report.recognitionPhraseCount!==report.completedLineCount)report.errors.push('Completed conversation classification total mismatch');var seenA={};cl.filter(function(l){return l.analysisRequired;}).forEach(function(l){var a=getJapaneseAnalysis(l.analysisId);if(!l.analysisId||!a||a.japanese!==l.japanese||!Array.isArray(a.tokens)||a.tokens.length<1)report.errors.push('Completed required conversation analysis invariant failed: '+l.id);seenA[l.analysisId]=(seenA[l.analysisId]||0)+1;});Object.keys(seenA).forEach(function(id){if(seenA[id]!==1||japaneseAnalyses.filter(function(a){return a.id===id;}).length!==1)report.errors.push('Completed analysis registry duplicate: '+id);});}
+  validateStandaloneConversations(report, sets, audioSet, analysisSet);
+  const allDays = auditDailyCourseReadability(90, 1);
+  report.fullCourseReadability = allDays;
+  if (allDays.itemsWithReading !== allDays.dailyCourseItemCount || allDays.itemsWithRomaji !== allDays.dailyCourseItemCount || allDays.itemsWithMeaning !== allDays.dailyCourseItemCount || allDays.kanjiItemsWithWholeWordReading !== allDays.kanjiItemCount || allDays.analysisCoveredCount !== allDays.analysisRequiredCount) report.errors.push('Days 1–90 Daily Course readability coverage is incomplete');
   const result = report.errors.length ? report : { ...report, ok: true }; console.info('[Nihon Path] Content validation', result); return result;
+}
+
+function validateStandaloneConversations(report, sets, audioSet, analysisSet) {
+  const expected = Array.from({length:20}, (_, i) => 'c'+(i+1)).concat([
+    'conv-phase4-request','conv-phase4-ongoing','conv-phase4-permission','conv-phase4-restaurant'
+  ]);
+  const approved = conversationEnrichmentCompletedConversationIds;
+  const displayed = getStandaloneConversations(), lines = displayed.flatMap(c => c.lines || []);
+  if (approved.length !== expected.length || new Set(approved).size !== expected.length || expected.some(id => !approved.includes(id))) report.errors.push('Gate 13C accepted conversation IDs differ from the 24-conversation checkpoint');
+  if (displayed.length !== 24 || lines.length !== 75) report.errors.push('Gate 13C expected 24 displayed conversations / 75 lines');
+  const classifications = ['FORMAL GRAMMAR','PRODUCTIVE FIXED PHRASE','RECOGNITION PHRASE'];
+  const counts = Object.fromEntries(classifications.map(c => [c, 0]));
+  const nonempty = x => typeof x === 'string' && !!x.trim();
+  const script = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u;
+  const sourceLineIds = new Set();
+  // Hidden sources retain structural/reference checks; final rich metadata is not required.
+  conversations.forEach(c => {
+    if (!nonempty(c.title) || !Array.isArray(c.lines) || !c.lines.length) report.errors.push('Malformed source conversation: '+c.id);
+    (c.lines || []).forEach(l => {
+      if (!l || !(Array.isArray(l) ? [l[0],l[1],l[2]] : [l.speaker,l.japanese,l.english]).every(nonempty)) report.errors.push('Malformed source conversation line: '+c.id);
+      if (!l) return;
+      if (l.id) { if (sourceLineIds.has(l.id)) report.errors.push('Duplicate conversation line id: '+l.id); sourceLineIds.add(l.id); }
+      if (l.audioId && !audioSet.has(l.audioId)) report.errors.push('Source conversation missing audio: '+l.id);
+      if (l.analysisId && !analysisSet.has(l.analysisId)) report.errors.push('Source conversation missing analysis: '+l.id);
+    });
+  });
+  let resolvedAudio = 0, resolvedAnalyses = 0, usefulAnalyses = 0;
+  const required = lines.filter(l => l.analysisRequired === true);
+  lines.forEach(l => {
+    if (!l || Array.isArray(l)) { report.errors.push('Standalone conversation requires a rich object'); return; }
+    ['id','speaker','japanese','reading','romaji','english','meaning','role','usage','audioId'].forEach(f => {
+      if (!nonempty(l[f])) report.errors.push('Standalone line missing '+f+': '+l.id);
+    });
+    if (!/[\p{Script=Hiragana}\p{Script=Katakana}]/u.test(l.reading) || /\p{Script=Han}/u.test(l.reading)) report.errors.push('Standalone line requires kana reading: '+l.id);
+    if (script.test(l.romaji)) report.errors.push('Japanese script in standalone romaji: '+l.id);
+    if (['A','B'].includes(l.role)) report.errors.push('Standalone line needs a useful role: '+l.id);
+    if (classifications.includes(l.classification)) counts[l.classification]++;
+    else report.errors.push('Invalid standalone classification: '+l.id);
+    if (typeof l.analysisRequired !== 'boolean') report.errors.push('Standalone line missing analysisRequired flag: '+l.id);
+    const audio = getAudioTarget(l.audioId);
+    if (audio && audio.text === l.japanese && audio.reading === l.reading) resolvedAudio++;
+    else report.errors.push('Standalone audio missing or mismatched: '+l.id);
+    if (l.analysisRequired === true) {
+      const analysis = getJapaneseAnalysis(l.analysisId);
+      if (analysis && analysis.japanese === l.japanese) resolvedAnalyses++;
+      else report.errors.push('Standalone required analysis missing or mismatched: '+l.id);
+      if (analysis) {
+        const analysisAudio = getAudioTarget(analysis.audioId);
+        if (!analysisAudio || analysisAudio.text !== l.japanese) report.errors.push('Standalone analysis audio missing or mismatched: '+l.id);
+        if (!nonempty(analysis.reading) || !nonempty(analysis.romaji) || script.test(analysis.romaji)) report.errors.push('Standalone analysis reading/romaji invalid: '+l.id);
+        (analysis.tokens || []).forEach(t => {
+          if (!nonempty(t.reading) || !nonempty(t.romaji) || script.test(t.romaji)) report.errors.push('Standalone analysis token reading/romaji invalid: '+l.id);
+        });
+      }
+      if (hasUsefulConversationAnalysis(analysis)) usefulAnalyses++;
+      else report.errors.push('Standalone required analysis is an empty/generic shell: '+l.id);
+    }
+  });
+  const total = Object.values(counts).reduce((a,b) => a+b, 0);
+  if (total !== lines.length) report.errors.push('Standalone classification total mismatch');
+  const refs = lessons.filter(l => l.conversationId != null);
+  Object.assign(report, {
+    completedConversationCount:displayed.length, completedLineCount:lines.length,
+    displayedConversationCount:displayed.length, displayedConversationLineCount:lines.length,
+    backlogConversationCount:conversations.length-displayed.length,
+    backlogLineCount:conversations.reduce((n,c)=>n+c.lines.length,0)-lines.length,
+    uniqueCompletedLineIdCount:new Set(lines.map(l=>l.id)).size,
+    linesWithExactlyOneClassification:total, classificationCounts:counts,
+    formalGrammarCount:counts[classifications[0]], productiveFixedPhraseCount:counts[classifications[1]], recognitionPhraseCount:counts[classifications[2]],
+    linesWithJapaneseScriptInRomaji:lines.filter(l=>script.test(l.romaji)).length,
+    standaloneAudioCoveredCount:resolvedAudio, standaloneAnalysisRequiredCount:required.length,
+    standaloneAnalysisResolvedCount:resolvedAnalyses, standaloneUsefulAnalysisCount:usefulAnalyses,
+    dailyConversationReferencesResolved:refs.filter(l=>sets.conversation.has(l.conversationId)).length,
+    dailyConversationReferencesMissing:refs.filter(l=>!sets.conversation.has(l.conversationId)).length
+  });
 }

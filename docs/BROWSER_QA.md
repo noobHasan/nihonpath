@@ -158,3 +158,34 @@ In the browser console run `NIHON_PATH.dev.openLesson(25)`. This opens Day 25 wi
 - [ ] Writing metadata persists while canvas drawings do not.
 - [ ] Writing Lab works at approximately 320px, 390px, tablet, and desktop widths.
 - [ ] Light and dark themes remain readable with no horizontal overflow.
+
+## Gate 14 — Real Browser / Device QA attempt (2026-09-17)
+
+**GATE 14 NOT READY — ACTUAL BROWSER QA COULD NOT BE PERFORMED.**
+
+The Codex In-app Browser was selected on the macOS host. Browser version was not obtained. Opening `file:///Users/feluda/Desktop/Projects/Others/nihonpath/index.html` was rejected by the browser tool's URL security policy before the application loaded. The rejection explicitly prohibits alternate-browser, indirect-execution, or other workarounds for this blocked action. No workaround was attempted. This is an environment access blocker, not evidence of an application defect.
+
+| Test area | Actual result |
+| --- | --- |
+| Actual application browser interaction | BLOCKED; application never loaded |
+| file:// compatibility | BLOCKED; attempted, not verified |
+| Fresh learner Day 1 → Day 2 and refresh persistence | BLOCKED |
+| Days 1–7 / representative checkpoints | BLOCKED |
+| All-90 smoke | 0 opened; 0 executed failures; 90 untested |
+| Dev Preview progress safety | BLOCKED |
+| Main navigation / Conversations 24/75 / backlog non-leak | BLOCKED |
+| Audio natural / slow / stop / switch / TTS fallback | BLOCKED |
+| Microphone / recording / denial handling | BLOCKED; no permission request or recording attempted |
+| Writing / assessments | BLOCKED |
+| Themes / Romaji Auto, On, Off / persistence | BLOCKED |
+| Responsive / 320px critical flow | BLOCKED; no widths tested |
+| Kana / vocabulary / kanji / grammar / reading / review / progress | BLOCKED |
+| Reset / modal / toast / keyboard | BLOCKED |
+| Console errors | Not measured; application never loaded |
+| Application defects found / fixed | None observed / none fixed; testing did not run |
+| Remaining P0 / P1 / P2 / P3 | Unknown; no browser evidence to assess |
+| Static regression | Not rerun; no application code changed; static checks are not a substitute |
+
+Requested manual widths 320, 390, 768, 1024, and 1440 and automated overflow widths 360, 430, 820, 1280, and 1920 remain untested. Existing checkboxes above intentionally remain unchecked.
+
+Only this QA document was modified during the attempt; no learner data, application code, Git staging, commits, pushes, branches, or history were changed. Gate 13 retains its previously verified **COMPLETE FOR V1** status, without a fresh regression claim. Gate 14 remains **NOT READY** pending an authorized browser environment that permits the required file deployment testing or user-performed browser QA. Gate 15 was not started.

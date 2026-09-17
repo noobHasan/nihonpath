@@ -67,7 +67,626 @@ conversationEnrichmentCompletedConversationIds.push('conv-phase4-permission','co
 var phase4BatchB=[['conv-phase4-permission','A','このシャツを見てもいいですか。','May I look at this shirt?','line-conv-phase4-permission-01','このシャツをみてもいいですか。','kono shatsu o mite mo ii desu ka','customer','Asking shop staff for permission to look at an item','FORMAL GRAMMAR',true,'analysis-line-conv-phase4-permission-01'],['conv-phase4-permission','B','はい、どうぞ。','Yes, please.','line-conv-phase4-permission-02','はい、どうぞ。','hai, douzo','shop staff','Recognizing shop staff granting permission','RECOGNITION PHRASE',true,'analysis-line-conv-phase4-permission-02'],['conv-phase4-permission','A','写真を撮ってもいいですか。','May I take a photo?','line-conv-phase4-permission-03','しゃしんをとってもいいですか。','shashin o totte mo ii desu ka','customer','Asking permission before taking a photo when the rule is unclear','FORMAL GRAMMAR',true,'analysis-line-conv-phase4-permission-03'],['conv-phase4-permission','B','すみません、いけません。','Sorry, you may not.','line-conv-phase4-permission-04','すみません、いけません。','sumimasen, ikemasen','shop staff','Recognizing a staff member politely refusing permission','RECOGNITION PHRASE',true,'analysis-line-conv-phase4-permission-04'],['conv-phase4-restaurant','A','ご注文は？','Your order?','line-conv-phase4-restaurant-01','ごちゅうもんは？','gochuumon wa?','restaurant staff','Recognizing a short restaurant-staff question asking for the customer’s order','RECOGNITION PHRASE',true,'analysis-line-conv-phase4-restaurant-01'],['conv-phase4-restaurant','B','水をお願いします。','Water, please.','line-conv-phase4-restaurant-02','みずをおねがいします。','mizu o onegaishimasu','customer','Politely requesting water at a restaurant','PRODUCTIVE FIXED PHRASE',true,'analysis-line-conv-phase4-restaurant-02'],['conv-phase4-restaurant','B','コーヒーとケーキをお願いします。','Coffee and cake, please.','line-conv-phase4-restaurant-03','コーヒーとケーキをおねがいします。','koohii to keeki o onegaishimasu','customer','Politely ordering two items together','PRODUCTIVE FIXED PHRASE',true,'analysis-line-conv-phase4-restaurant-03']];
 phase4BatchB.forEach(function(m){var c=conversations.find(function(x){return x.id===m[0];}),h=(c.lines||[]).filter(function(x){var s=Array.isArray(x)?x[0]:x.speaker,j=Array.isArray(x)?x[1]:x.japanese,e=Array.isArray(x)?x[2]:x.english;return s===m[1]&&j===m[2]&&e===m[3];});if(h.length!==1)throw new Error('Phase4B match failure '+m[4]);var r=h[0];Object.assign(r,{id:m[4],speaker:m[1],role:m[7],japanese:m[2],reading:m[5],romaji:m[6],english:m[3],meaning:m[3],usage:m[8],classification:m[9],analysisRequired:true,analysisId:m[11],audioId:'audio-'+m[4]});r[0]=r.speaker;r[1]=r.japanese;r[2]=r.english;var a=getAudioTarget(r.audioId);if(a)Object.assign(a,{text:r.japanese,reading:r.reading,lang:'ja-JP',speaker:r.role,transcript:r.japanese,ttsFallback:a.asset==null});});
 var phase4BAnalyses=[['analysis-line-conv-phase4-permission-01','このシャツを見てもいいですか。','このシャツをみてもいいですか。','kono shatsu o mite mo ii desu ka','May I look at this shirt?',['この','シャツ','を','見て','もいいですか']],['analysis-line-conv-phase4-permission-02','はい、どうぞ。','はい、どうぞ。','hai, douzo','Yes, go ahead.',['はい','どうぞ']],['analysis-line-conv-phase4-permission-03','写真を撮ってもいいですか。','しゃしんをとってもいいですか。','shashin o totte mo ii desu ka','May I take a photo?',['写真','を','撮って','もいいですか']],['analysis-line-conv-phase4-permission-04','すみません、いけません。','すみません、いけません。','sumimasen, ikemasen','Sorry, that’s not allowed.',['すみません','いけません']],['analysis-line-conv-phase4-restaurant-01','ご注文は？','ごちゅうもんは？','gochuumon wa?','What would you like to order?',['ご注文','は']],['analysis-line-conv-phase4-restaurant-02','水をお願いします。','みずをおねがいします。','mizu o onegaishimasu','Water, please.',['水','を','お願いします']],['analysis-line-conv-phase4-restaurant-03','コーヒーとケーキをお願いします。','コーヒーとケーキをおねがいします。','koohii to keeki o onegaishimasu','Coffee and cake, please.',['コーヒー','と','ケーキ','を','お願いします']]];phase4BAnalyses.forEach(function(a){var x=japaneseAnalyses.find(function(z){return z.id===a[0];});if(!x){x={id:a[0]};japaneseAnalyses.push(x);}Object.assign(x,{japanese:a[1],reading:a[2],romaji:a[3],naturalEnglish:a[4],literalEnglish:a[4],tokens:a[5].map(function(s){return{surface:s,meaning:s,role:'conversation phrase'};}),usage:'Use in the stated beginner conversation context.',audioId:'audio-'+a[0].replace('analysis-','')});});
-conversationEnrichmentCompletedConversationIds.push('conv-phase4-station','conv-phase4-home');
-var phase4C=[['conv-phase4-station','A','新宿へ行く電車は何番線ですか。','Which track is the train for Shinjuku?','line-conv-phase4-station-01','しんじゅくへいくでんしゃはなんばんせんですか。','shinjuku e iku densha wa nan-bansen desu ka','traveler','Asking station staff which track serves a train going to Shinjuku','FORMAL GRAMMAR',true,'analysis-line-conv-phase4-station-01'],['conv-phase4-station','B','三番線です。','Track three.','line-conv-phase4-station-02','さんばんせんです。','san-bansen desu','station staff','Recognizing a station staff member giving a track number','RECOGNITION PHRASE',false,null],['conv-phase4-station','A','ありがとうございます。','Thank you.','line-conv-phase4-station-03','ありがとうございます。','arigatou gozaimasu','traveler','Thanking station staff for the information','PRODUCTIVE FIXED PHRASE',false,null],['conv-phase4-home','A','部屋に問題があります。','There is a problem in the room.','line-conv-phase4-home-01','へやにもんだいがあります。','heya ni mondai ga arimasu','resident','Telling property staff that there is a problem in the room','FORMAL GRAMMAR',true,'analysis-line-conv-phase4-home-01'],['conv-phase4-home','B','どうしましたか。','What happened?','line-conv-phase4-home-02','どうしましたか。','dou shimashita ka','property staff','Recognizing property staff asking what happened or what the problem is','RECOGNITION PHRASE',true,'analysis-line-conv-phase4-home-02'],['conv-phase4-home','A','水が出ません。','Water does not come out.','line-conv-phase4-home-03','みずがでません。','mizu ga demasen','resident','Reporting that water is not coming out in the apartment','PRODUCTIVE FIXED PHRASE',true,'analysis-line-conv-phase4-home-03']];phase4C.forEach(function(m){var c=conversations.find(function(x){return x.id===m[0];}),h=(c.lines||[]).filter(function(x){var s=Array.isArray(x)?x[0]:x.speaker,j=Array.isArray(x)?x[1]:x.japanese,e=Array.isArray(x)?x[2]:x.english;return s===m[1]&&j===m[2]&&e===m[3];});if(h.length!==1)throw Error('Phase4C match failure '+m[4]);var old=h[0],r=Array.isArray(old)?{}:old;Object.assign(r,{id:m[4],speaker:m[1],role:m[7],japanese:m[2],reading:m[5],romaji:m[6],english:m[3],meaning:m[3],usage:m[8],classification:m[9],analysisRequired:m[10],analysisId:m[11],audioId:'audio-'+m[4]});r[0]=r.speaker;r[1]=r.japanese;r[2]=r.english;if(Array.isArray(old))c.lines[c.lines.indexOf(old)]=r;var a=getAudioTarget(r.audioId);if(a)Object.assign(a,{text:r.japanese,reading:r.reading,lang:'ja-JP',speaker:r.role,transcript:r.japanese,ttsFallback:a.asset==null});else audioTargets.push({id:r.audioId,text:r.japanese,reading:r.reading,lang:'ja-JP',asset:null,ttsFallback:true,slowRate:.75,naturalRate:1,speaker:r.role,transcript:r.japanese,transcriptPolicy:'visible'});});
-[['analysis-line-conv-phase4-station-01','新宿へ行く電車は何番線ですか。','しんじゅくへいくでんしゃはなんばんせんですか。','shinjuku e iku densha wa nan-bansen desu ka','Which track is the train going to Shinjuku on?',['新宿','へ','行く','電車','は','何番線','ですか']],['analysis-line-conv-phase4-home-01','部屋に問題があります。','へやにもんだいがあります。','heya ni mondai ga arimasu','There is a problem in the room.',['部屋','に','問題','が','あります']],['analysis-line-conv-phase4-home-02','どうしましたか。','どうしましたか。','dou shimashita ka',"What happened? / What's the problem?",['どう','しました','か']],['analysis-line-conv-phase4-home-03','水が出ません。','みずがでません。','mizu ga demasen',"The water isn't running.",['水','が','出ません']]].forEach(function(a){var x=japaneseAnalyses.find(function(z){return z.id===a[0];});if(!x){x={id:a[0]};japaneseAnalyses.push(x);}Object.assign(x,{japanese:a[1],reading:a[2],romaji:a[3],naturalEnglish:a[4],literalEnglish:a[4],tokens:a[5].map(function(s){return{surface:s,meaning:s,role:'conversation phrase'};}),usage:'Use in the stated beginner conversation context.',audioId:'audio-'+a[0].replace('analysis-','')});});
 [['analysis-line-conv-phase4-request-01','ここに名前を書いてください。','ここになまえをかいてください。','koko ni namae o kaite kudasai','Please write your name here.','Here, please write your name.',['ここ','に','名前','を','書いて','ください']],['analysis-line-conv-phase4-request-03','少々お待ちください。','しょうしょうおまちください。','shoushou omachi kudasai','Please wait a moment.','Please wait a little.',['少々','お待ちください']],['analysis-line-conv-phase4-ongoing-01','今、何をしていますか。','いま、なにをしていますか。','ima, nani o shite imasu ka','What are you doing now?','Now, what are you doing?',['今','何','を','しています','か']],['analysis-line-conv-phase4-ongoing-02','コーヒーを飲んでいます。','コーヒーをのんでいます。','koohii o nonde imasu','I am drinking coffee.','I am in the state of drinking coffee.',['コーヒー','を','飲んでいます']]].forEach(function(a){var x=japaneseAnalyses.find(function(z){return z.id===a[0];});if(!x){x={id:a[0]};japaneseAnalyses.push(x);}Object.assign(x,{japanese:a[1],reading:a[2],romaji:a[3],naturalEnglish:a[4],literalEnglish:a[5],tokens:a[6].map(function(s){return{surface:s,meaning:s,role:'conversation phrase'};}),usage:'Use in the stated beginner conversation context.',audioId:'audio-'+a[0].replace('analysis-','')});});
+
+// Gate 13C: standalone eligibility is independent of Daily Course source availability.
+function getStandaloneConversations() {
+  var approved = new Set(conversationEnrichmentCompletedConversationIds);
+  return conversations.filter(function(c) { return approved.has(c.id); });
+}
+
+// A surface-copy token list is not a learner-facing explanation.
+function hasUsefulConversationAnalysis(a) {
+  return !!(a && ['japanese','reading','romaji','naturalEnglish','literalEnglish'].every(function(f) {
+    return typeof a[f] === 'string' && a[f].trim();
+  }) && Array.isArray(a.tokens) && a.tokens.length && a.tokens.every(function(t) {
+    return t && typeof t.surface === 'string' && t.surface.trim() &&
+      typeof t.meaning === 'string' && t.meaning.trim() &&
+      (!/[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u.test(t.surface) || t.meaning.trim() !== t.surface.trim());
+  }) && a.tokens.some(function(t) { return t.meaning.trim() !== t.surface.trim(); }));
+}
+
+// Gate 13C1: upgrade the manifested 17 records in place; never create fallback IDs.
+var canonicalAnalysisRepairs = [
+  {
+    "id": "analysis-line-c18-01",
+    "literalEnglish": "As for hobbies, what are they?",
+    "usageNote": "Use this to ask about someone’s hobbies.",
+    "tokens": [
+      {
+        "surface": "趣味",
+        "reading": "しゅみ",
+        "romaji": "shumi",
+        "meaning": "hobby / hobbies",
+        "role": "topic noun"
+      },
+      {
+        "surface": "は",
+        "reading": "は",
+        "romaji": "wa",
+        "meaning": "as for",
+        "role": "topic particle"
+      },
+      {
+        "surface": "何",
+        "reading": "なん",
+        "romaji": "nan",
+        "meaning": "what",
+        "role": "question word"
+      },
+      {
+        "surface": "ですか",
+        "reading": "ですか",
+        "romaji": "desu ka",
+        "meaning": "is it? / are they?",
+        "role": "polite question ending"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-c18-02",
+    "literalEnglish": "Games and photography are things I like.",
+    "usageNote": "好き describes a preference. Use が for the things you like; と joins the two nouns.",
+    "tokens": [
+      {
+        "surface": "ゲーム",
+        "reading": "ゲーム",
+        "romaji": "geemu",
+        "meaning": "games",
+        "role": "first liked activity"
+      },
+      {
+        "surface": "と",
+        "reading": "と",
+        "romaji": "to",
+        "meaning": "and",
+        "role": "noun-joining particle"
+      },
+      {
+        "surface": "写真",
+        "reading": "しゃしん",
+        "romaji": "shashin",
+        "meaning": "photography / photos",
+        "role": "second liked activity"
+      },
+      {
+        "surface": "が",
+        "reading": "が",
+        "romaji": "ga",
+        "meaning": "marks what is liked",
+        "role": "preference marker"
+      },
+      {
+        "surface": "好きです",
+        "reading": "すきです",
+        "romaji": "suki desu",
+        "meaning": "like / am fond of",
+        "role": "polite preference expression",
+        "baseForm": "好き",
+        "conjugation": "好き + です → 好きです (polite; 好き is a な-adjective)"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-c18-03",
+    "literalEnglish": "I too: games are something I like.",
+    "usageNote": "も adds you to the people who like games. が marks what you like.",
+    "tokens": [
+      {
+        "surface": "私",
+        "reading": "わたし",
+        "romaji": "watashi",
+        "meaning": "I / me",
+        "role": "person speaking"
+      },
+      {
+        "surface": "も",
+        "reading": "も",
+        "romaji": "mo",
+        "meaning": "also / too",
+        "role": "addition particle"
+      },
+      {
+        "surface": "ゲーム",
+        "reading": "ゲーム",
+        "romaji": "geemu",
+        "meaning": "games",
+        "role": "liked activity"
+      },
+      {
+        "surface": "が",
+        "reading": "が",
+        "romaji": "ga",
+        "meaning": "marks what is liked",
+        "role": "preference marker"
+      },
+      {
+        "surface": "好きです",
+        "reading": "すきです",
+        "romaji": "suki desu",
+        "meaning": "like / am fond of",
+        "role": "polite preference expression",
+        "baseForm": "好き",
+        "conjugation": "好き + です → 好きです (polite; 好き is a な-adjective)"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-c19-01",
+    "literalEnglish": "On Saturday, would you not watch a movie?",
+    "usageNote": "ませんか is a polite invitation here, not a statement that you will not watch. The natural meaning is “Would you like to…?”",
+    "tokens": [
+      {
+        "surface": "土曜日",
+        "reading": "どようび",
+        "romaji": "doyoubi",
+        "meaning": "Saturday",
+        "role": "day of the invitation"
+      },
+      {
+        "surface": "映画",
+        "reading": "えいが",
+        "romaji": "eiga",
+        "meaning": "movie",
+        "role": "thing to watch"
+      },
+      {
+        "surface": "を",
+        "reading": "を",
+        "romaji": "o",
+        "meaning": "marks what you watch",
+        "role": "object particle"
+      },
+      {
+        "surface": "見ませんか",
+        "reading": "みませんか",
+        "romaji": "mimasen ka",
+        "meaning": "would you like to watch?",
+        "role": "polite invitation",
+        "baseForm": "見る",
+        "conjugation": "見る → 見ます → 見ません + か → 見ませんか"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-c20-01",
+    "literalEnglish": "Today, would you not eat together?",
+    "usageNote": "Use ませんか to invite someone. 一緒に is a useful chunk meaning “together.”",
+    "tokens": [
+      {
+        "surface": "今日",
+        "reading": "きょう",
+        "romaji": "kyou",
+        "meaning": "today",
+        "role": "time of the invitation"
+      },
+      {
+        "surface": "一緒に",
+        "reading": "いっしょに",
+        "romaji": "issho ni",
+        "meaning": "together",
+        "role": "adverbial chunk describing how to eat"
+      },
+      {
+        "surface": "食べませんか",
+        "reading": "たべませんか",
+        "romaji": "tabemasen ka",
+        "meaning": "would you like to eat?",
+        "role": "polite invitation",
+        "baseForm": "食べる",
+        "conjugation": "食べる → 食べます → 食べません + か → 食べませんか"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-c20-02",
+    "literalEnglish": "Sorry. As for today, a little…",
+    "usageNote": "The unfinished ちょっと… softly signals difficulty and declines the invitation in this context. A full reason is left unsaid.",
+    "tokens": [
+      {
+        "surface": "すみません",
+        "reading": "すみません",
+        "romaji": "sumimasen",
+        "meaning": "sorry",
+        "role": "fixed apology softening the refusal"
+      },
+      {
+        "surface": "今日",
+        "reading": "きょう",
+        "romaji": "kyou",
+        "meaning": "today",
+        "role": "day being discussed"
+      },
+      {
+        "surface": "は",
+        "reading": "は",
+        "romaji": "wa",
+        "meaning": "as for",
+        "role": "topic particle"
+      },
+      {
+        "surface": "ちょっと",
+        "reading": "ちょっと",
+        "romaji": "chotto",
+        "meaning": "a little; a bit difficult here",
+        "role": "indirect refusal with the rest left unsaid"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-request-01",
+    "literalEnglish": "Here, your name, please write.",
+    "usageNote": "に marks where the name should go on the form; を marks what to write. Verb て-form + ください makes a polite request.",
+    "tokens": [
+      {
+        "surface": "ここ",
+        "reading": "ここ",
+        "romaji": "koko",
+        "meaning": "here",
+        "role": "place on the form"
+      },
+      {
+        "surface": "に",
+        "reading": "に",
+        "romaji": "ni",
+        "meaning": "in this spot",
+        "role": "placement particle: where the writing goes"
+      },
+      {
+        "surface": "名前",
+        "reading": "なまえ",
+        "romaji": "namae",
+        "meaning": "name",
+        "role": "thing to write"
+      },
+      {
+        "surface": "を",
+        "reading": "を",
+        "romaji": "o",
+        "meaning": "marks what you write",
+        "role": "object particle"
+      },
+      {
+        "surface": "書いて",
+        "reading": "かいて",
+        "romaji": "kaite",
+        "meaning": "write",
+        "role": "verb て-form connecting to the request",
+        "baseForm": "書く",
+        "conjugation": "書く → 書いて"
+      },
+      {
+        "surface": "ください",
+        "reading": "ください",
+        "romaji": "kudasai",
+        "meaning": "please do",
+        "role": "request ending after a verb’s て-form"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-request-03",
+    "literalEnglish": "A short while, please wait.",
+    "usageNote": "Recognize this polite service phrase as a chunk. You do not need to build honorific forms to understand it.",
+    "tokens": [
+      {
+        "surface": "少々",
+        "reading": "しょうしょう",
+        "romaji": "shoushou",
+        "meaning": "a little while / a moment",
+        "role": "polite amount-of-time expression"
+      },
+      {
+        "surface": "お待ちください",
+        "reading": "おまちください",
+        "romaji": "omachi kudasai",
+        "meaning": "please wait",
+        "role": "fixed polite service request"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-ongoing-01",
+    "literalEnglish": "Now, what are you in the middle of doing?",
+    "usageNote": "しています describes an action happening now in this question. 何 is read なに before を.",
+    "tokens": [
+      {
+        "surface": "今",
+        "reading": "いま",
+        "romaji": "ima",
+        "meaning": "now",
+        "role": "time expression"
+      },
+      {
+        "surface": "何",
+        "reading": "なに",
+        "romaji": "nani",
+        "meaning": "what",
+        "role": "question word for the activity"
+      },
+      {
+        "surface": "を",
+        "reading": "を",
+        "romaji": "o",
+        "meaning": "marks what you are doing",
+        "role": "object particle"
+      },
+      {
+        "surface": "しています",
+        "reading": "しています",
+        "romaji": "shite imasu",
+        "meaning": "are doing",
+        "role": "ongoing action in polite form",
+        "baseForm": "する",
+        "conjugation": "する → して → しています"
+      },
+      {
+        "surface": "か",
+        "reading": "か",
+        "romaji": "ka",
+        "meaning": "turns this into a question",
+        "role": "question particle"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-ongoing-02",
+    "literalEnglish": "Coffee, I am in the middle of drinking.",
+    "usageNote": "飲んでいます describes drinking in progress here. を marks the drink.",
+    "tokens": [
+      {
+        "surface": "コーヒー",
+        "reading": "コーヒー",
+        "romaji": "koohii",
+        "meaning": "coffee",
+        "role": "drink"
+      },
+      {
+        "surface": "を",
+        "reading": "を",
+        "romaji": "o",
+        "meaning": "marks what you drink",
+        "role": "object particle"
+      },
+      {
+        "surface": "飲んでいます",
+        "reading": "のんでいます",
+        "romaji": "nonde imasu",
+        "meaning": "am drinking",
+        "role": "ongoing action in polite form",
+        "baseForm": "飲む",
+        "conjugation": "飲む → 飲んで → 飲んでいます"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-permission-01",
+    "literalEnglish": "This shirt: is it okay if I look at it?",
+    "usageNote": "Verb て-form + もいいですか asks permission. Learn もいいですか as one permission pattern here.",
+    "tokens": [
+      {
+        "surface": "この",
+        "reading": "この",
+        "romaji": "kono",
+        "meaning": "this",
+        "role": "points to the following noun"
+      },
+      {
+        "surface": "シャツ",
+        "reading": "シャツ",
+        "romaji": "shatsu",
+        "meaning": "shirt",
+        "role": "item to look at"
+      },
+      {
+        "surface": "を",
+        "reading": "を",
+        "romaji": "o",
+        "meaning": "marks what you look at",
+        "role": "object particle"
+      },
+      {
+        "surface": "見て",
+        "reading": "みて",
+        "romaji": "mite",
+        "meaning": "look at",
+        "role": "verb て-form before the permission pattern",
+        "baseForm": "見る",
+        "conjugation": "見る → 見て → 見てもいいですか"
+      },
+      {
+        "surface": "もいいですか",
+        "reading": "もいいですか",
+        "romaji": "mo ii desu ka",
+        "meaning": "is it okay if I…?",
+        "role": "permission question after a verb’s て-form"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-permission-02",
+    "literalEnglish": "Yes; please go ahead.",
+    "usageNote": "どうぞ gives permission here. It can also politely offer something in other situations.",
+    "tokens": [
+      {
+        "surface": "はい",
+        "reading": "はい",
+        "romaji": "hai",
+        "meaning": "yes",
+        "role": "affirmative reply"
+      },
+      {
+        "surface": "どうぞ",
+        "reading": "どうぞ",
+        "romaji": "douzo",
+        "meaning": "go ahead",
+        "role": "fixed expression granting permission"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-permission-03",
+    "literalEnglish": "A photo: is it okay if I take one?",
+    "usageNote": "写真を撮る means “take a photo.” The permission question does not assume that photography is allowed.",
+    "tokens": [
+      {
+        "surface": "写真",
+        "reading": "しゃしん",
+        "romaji": "shashin",
+        "meaning": "photo",
+        "role": "thing to take"
+      },
+      {
+        "surface": "を",
+        "reading": "を",
+        "romaji": "o",
+        "meaning": "marks what you take",
+        "role": "object particle"
+      },
+      {
+        "surface": "撮って",
+        "reading": "とって",
+        "romaji": "totte",
+        "meaning": "take a photo",
+        "role": "verb て-form before the permission pattern",
+        "baseForm": "撮る",
+        "conjugation": "撮る → 撮って → 撮ってもいいですか"
+      },
+      {
+        "surface": "もいいですか",
+        "reading": "もいいですか",
+        "romaji": "mo ii desu ka",
+        "meaning": "is it okay if I…?",
+        "role": "permission question after a verb’s て-form"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-permission-04",
+    "literalEnglish": "Sorry; that is not acceptable.",
+    "usageNote": "Recognize いけません as “not allowed” in this reply to a permission question. Keep it as a chunk here.",
+    "tokens": [
+      {
+        "surface": "すみません",
+        "reading": "すみません",
+        "romaji": "sumimasen",
+        "meaning": "sorry",
+        "role": "fixed apology softening the refusal"
+      },
+      {
+        "surface": "いけません",
+        "reading": "いけません",
+        "romaji": "ikemasen",
+        "meaning": "that is not allowed",
+        "role": "fixed response denying permission"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-restaurant-01",
+    "literalEnglish": "As for your order…?",
+    "usageNote": "Staff leave the rest of the question unsaid. Recognize this as an invitation to order; you do not need to produce honorific service language.",
+    "tokens": [
+      {
+        "surface": "ご注文",
+        "reading": "ごちゅうもん",
+        "romaji": "gochuumon",
+        "meaning": "your order",
+        "role": "polite service-language noun"
+      },
+      {
+        "surface": "は",
+        "reading": "は",
+        "romaji": "wa",
+        "meaning": "as for",
+        "role": "topic particle in a shortened question"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-restaurant-02",
+    "literalEnglish": "Water, I request please.",
+    "usageNote": "Noun + をお願いします is a useful polite ordering pattern. Keep お願いします as a fixed request chunk.",
+    "tokens": [
+      {
+        "surface": "水",
+        "reading": "みず",
+        "romaji": "mizu",
+        "meaning": "water",
+        "role": "requested item"
+      },
+      {
+        "surface": "を",
+        "reading": "を",
+        "romaji": "o",
+        "meaning": "marks what you request",
+        "role": "object particle"
+      },
+      {
+        "surface": "お願いします",
+        "reading": "おねがいします",
+        "romaji": "onegaishimasu",
+        "meaning": "please / I would like",
+        "role": "fixed polite request"
+      }
+    ]
+  },
+  {
+    "id": "analysis-line-conv-phase4-restaurant-03",
+    "literalEnglish": "Coffee and cake, I request please.",
+    "usageNote": "と joins the two items. を marks the whole group as what you are requesting.",
+    "tokens": [
+      {
+        "surface": "コーヒー",
+        "reading": "コーヒー",
+        "romaji": "koohii",
+        "meaning": "coffee",
+        "role": "first requested item"
+      },
+      {
+        "surface": "と",
+        "reading": "と",
+        "romaji": "to",
+        "meaning": "and",
+        "role": "noun-joining particle"
+      },
+      {
+        "surface": "ケーキ",
+        "reading": "ケーキ",
+        "romaji": "keeki",
+        "meaning": "cake",
+        "role": "second requested item"
+      },
+      {
+        "surface": "を",
+        "reading": "を",
+        "romaji": "o",
+        "meaning": "marks the items you request",
+        "role": "object particle"
+      },
+      {
+        "surface": "お願いします",
+        "reading": "おねがいします",
+        "romaji": "onegaishimasu",
+        "meaning": "please / I would like",
+        "role": "fixed polite request"
+      }
+    ]
+  }
+];
+canonicalAnalysisRepairs.forEach(function(repair) {
+  var matches = japaneseAnalyses.filter(function(a) { return a.id === repair.id; });
+  if (matches.length !== 1) throw new Error('Canonical analysis repair requires exactly one record: ' + repair.id);
+  Object.assign(matches[0], repair);
+});
+// Direct reference repair: earlier base analyses omitted their existing line audio ID.
+getStandaloneConversations().forEach(function(c) {
+  c.lines.filter(function(line) { return line.analysisRequired; }).forEach(function(line) {
+    var analysis = getJapaneseAnalysis(line.analysisId);
+    var audio = getAudioTarget(line.audioId);
+    if (!analysis || analysis.japanese !== line.japanese || !audio || audio.text !== line.japanese) {
+      throw new Error('Canonical analysis/audio reference mismatch: ' + line.id);
+    }
+    if (!analysis.audioId) analysis.audioId = line.audioId;
+  });
+});
