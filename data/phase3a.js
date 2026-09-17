@@ -33,3 +33,4 @@ var p3Lessons={
 };
 function p3ActiveGrammar(id,day){if(id==='g7'&&day>=26)return 'grammar-ni-destination';return p3GrammarMap[id]||id;}
 for(let d=21;d<=30;d++){const base=lessons[d-1],lesson=p3Lessons[d];lesson.grammarIds=(lesson.grammarIds||[]).map(function(id){return p3ActiveGrammar(id,d);});(lesson.quiz||[]).forEach(function(q){(q.reviewTargets||[]).forEach(function(t){if(t.type==='grammar')t.id=p3ActiveGrammar(t.id,d);});});Object.assign(base,lesson,{id:`n5-day-${String(d).padStart(3,'0')}`,level:'N5',day:d,phaseTitle:'Foundations',status:'reviewed',estimatedMinutes:d===30?25:20,romajiPolicy:'minimal',prerequisites:[`n5-day-${String(d-1).padStart(3,'0')}`],reviewTargets:(lesson.grammarIds||[]).map(id=>({type:'grammar',id}))});}
+lessons[24].examples[0].analysisId='analysis-day025-seven-oclock';

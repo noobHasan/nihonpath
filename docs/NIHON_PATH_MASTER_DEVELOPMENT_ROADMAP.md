@@ -24,9 +24,9 @@ Nihon Path should be presented as a **strong beginner / N5 + Japan survival foun
 
 ---
 
-## 2. Universal content-depth contract — applies to Days 1–90
+## 2. Universal content-depth and Daily Course readability contract — applies to Days 1–90
 
-Every important learner-facing Japanese item must be explainable at the appropriate depth. This applies retroactively to Days 1–80 and must be built into Days 81–90 from the start.
+Every learner-facing Japanese item inside Daily Course must provide an authored surface form, kana reading, pronunciation/romaji, and natural English meaning. Romaji display follows the learner preference, but authored romaji data remains required. This applies retroactively to Days 1–80 and must be built into Days 81–90 from the start. Additional explanation is progressive and item-appropriate rather than an always-expanded wall of detail.
 
 ### 2.1 Sentence breakdown contract
 

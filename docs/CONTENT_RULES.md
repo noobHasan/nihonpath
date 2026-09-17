@@ -1,9 +1,44 @@
 # Content Rules
 
-Keep explanations beginner-friendly, distinguish language from cultural tendencies, and avoid presenting changing administrative or legal details as permanent facts. Validate lesson-content relationships before curriculum release.
-
-- Daily lesson composition must never be derived from array position, random selection, or modulo cycling.
-- Every new vocabulary/grammar/kanji item shown in a lesson must be explicitly referenced by that lesson.
-- Lesson-specific quiz questions must be authored against the lesson objectives.
-- `draft` means incomplete or temporary, `authored` means intentionally written and objective-aligned, and `reviewed` means it has passed the curriculum, Japanese, and dependency audit.
-- Each authored curriculum phase should normally have one authoritative phase data file. Temporary repair files may be used during work, but should be consolidated before the phase is marked reviewed unless a documented technical reason prevents it.
+- Important Japanese must eventually have an authored breakdown.
+- Japanese token boundaries are authored; never tokenize naively.
+- Whole words remain the primary vocabulary units.
+- Conjugation explanations are authored, not guessed.
+- Audio text is not a substitute for listening audio.
+- Writing means learner production.
+- Speaking means learner production.
+- Recognition chunks remain explicitly classified.
+- Legacy content may temporarily fall back safely during migration.
+- Days 81–90 cannot be completed before required infrastructure exists.
+- Keep explanations beginner-friendly and distinguish language from cultural tendencies.
+- Avoid treating changing administrative, legal, medical, or procedural details as permanent facts.
+- Daily composition uses explicit references, never array position, random selection, or modulo cycling.
+- Each authored phase uses one authoritative phase data file unless documented otherwise.
+- `data/analysis.js` / `japaneseAnalyses` is the authoritative shared analysis registry.
+- Analysis records are manually authored and must exactly match the analyzed surface text.
+- Character breakdown is selective and follows word-level explanation.
+- Do not force per-character readings when the reading cannot be isolated sensibly.
+- Explain okurigana as part of the word/form, not as an independent lexical unit.
+- Character semantics are memory support, not a guaranteed compositional translation.
+- Do not autoplay audio; playback requires learner interaction.
+- Listening requires audible playback; visible Japanese text is not listening practice.
+- TTS is a practice fallback, not the final corpus for mock listening or assessments.
+- Request microphone access only after an explicit learner action.
+- Keep recordings local to the browser session; never upload or persist audio bytes.
+- Speaking tasks require learner production and self-rating; do not claim automatic pronunciation scores.
+- Writing tasks require learner output; clicking Learned is not writing practice.
+- Handwriting and free responses are self-checked unless a future validated grader exists.
+- Do not fabricate stroke-order data or automatically split Japanese into tokens.
+- Japanese IME input remains the learner device's responsibility; do not silently accept romaji.
+- Dictation must hide visible Japanese until the learner attempts or reveals the answer.
+- Universal Daily Course readability contract: every learner-facing Japanese item from Day 1 through Day 90 must provide authored surface, kana reading, pronunciation/romaji, and natural meaning, with item-appropriate deeper support.
+- Romaji data is authored even when display is hidden by the learner's Romaji preference; kana readings remain available when Romaji is Off.
+- Multi-character Daily Course items may not appear as unexplained Japanese plus English only.
+- Kanji-bearing Daily Course words require a whole-word reading; selective character support never replaces word-first learning.
+- Do not infer readings, split Japanese automatically, or generate unverified romaji at runtime.
+- Assessment questions are authored manually and use reviewed content only; no random question assembly or future-content leakage.
+- Assessment results are internal evidence, never official JLPT scores, certification, or guaranteed readiness.
+- Do not reveal answers, explanations, breakdowns, or listening transcripts before assessment submission.
+- Self-check production contributes completion evidence, not objective correctness.
+- Diagnostic TTS is infrastructure fallback audio, not a final official-style listening corpus.
+- Assessment history remains separate from normal quiz history unless a later gate deliberately integrates them.

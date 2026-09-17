@@ -29,10 +29,19 @@
 - Stage 10 — Phase 5B authoring — Days 71–80: next
 - Stage 10 — Phase 5B authoring — Days 71–80: complete
 - Stage 10A — Phase 5B curriculum/Japanese/dependency audit: complete
+- Gate 1 — Master roadmap + content model design: complete
+- Gate 2 — Detailed Japanese breakdown renderer: complete / finalized
+- Gate 3 — Audio + speaking infrastructure: complete
 
 ## Next stages
 
-1. Final Phase — author Days 81–90 using the canonical titles already present in `data/course.js`.
+Project brain: `docs/NIHON_PATH_MASTER_DEVELOPMENT_ROADMAP.md`
+
+Current content status: 90 reviewed, 0 authored, 0 draft.
+
+Current gate: Gate 12 — Final curriculum/Japanese audit: COMPLETE / FINALIZED.
+
+Next after successful completion: Gate 13 — Full library audit.
 
 Phase 5A spiral-learning note: Phase 4 introduced these forms through practical survival situations; Phase 5A consolidates their formation, contrasts, controlled production, and usage confidence.
 2. Validate vocabulary, grammar, kanji, conversations, reading, and practical modules against lesson goals.

@@ -1,5 +1,9 @@
 # Browser QA Checklist
 
+## Gate 11D browser-QA checklist
+
+Check Day 86 hidden transcripts, natural/slow playback, replay, and optional recording; check Day 87 marathon contexts, modes, audio, and reveal behavior. Live browser checks were not performed in this gate.
+
 Manual test this file by opening `index.html` directly in a browser. Use a fresh Nihon Path state for the fresh-user flow; reset only through the in-app Reset progress control.
 
 ## Fresh-user flow
@@ -57,3 +61,100 @@ Test approximately at 320, 360, 390, 430, 768, 820, 1024, 1280, 1440, and 1920px
 ## Developer lesson preview
 
 In the browser console run `NIHON_PATH.dev.openLesson(25)`. This opens Day 25 without changing completion state, unlocking lessons, or modifying localStorage. It is a development helper and is not shown in the learner UI.
+
+## Japanese breakdown QA
+
+- [ ] Open an enriched early lesson and confirm `Break this down` appears.
+- [ ] Open an enriched later lesson and confirm expansion/collapse works.
+- [ ] Open a legacy lesson with no `analysisId`; confirm no empty or broken panel appears.
+- [ ] Verify Romaji On and Romaji Off affect both analysis and token romaji.
+- [ ] Verify light and dark themes.
+- [ ] Check approximately 320px and 390px mobile widths, tablet, and desktop.
+- [ ] Confirm long token sets wrap without horizontal overflow.
+- [ ] Confirm a character subsection appears after word-level tokens.
+- [ ] Confirm okurigana and polite-ending labels are understandable.
+- [ ] Confirm the Day 80 long analysis remains readable when expanded.
+- [ ] Confirm any nested/native disclosures remain keyboard accessible.
+
+## Audio and speaking QA
+
+### Model audio
+
+- [ ] Natural playback works.
+- [ ] Slow playback works.
+- [ ] Stop works.
+- [ ] Starting another target stops the previous target.
+- [ ] Playback works with Romaji Off.
+- [ ] Navigation stops active model playback.
+
+### TTS fallback
+
+- [ ] Japanese speech is requested when no asset exists.
+- [ ] Missing Japanese voice does not crash playback.
+
+### Speaking practice
+
+- [ ] Microphone permission is requested only after clicking Start recording.
+- [ ] Start and stop recording work.
+- [ ] Microphone tracks stop after recording.
+- [ ] Own recording plays back.
+- [ ] Re-recording replaces the prior object URL safely.
+- [ ] Delete revokes the recording object URL.
+- [ ] Self-rating persists as metadata.
+- [ ] Refresh preserves metadata but not the recording.
+- [ ] Permission denied and unsupported-browser messages are learner-friendly.
+
+### Privacy and responsive behavior
+
+- [ ] No recording upload occurs.
+- [ ] No audio bytes are persisted in localStorage.
+- [ ] Controls fit at approximately 320px and 390px, tablet, and desktop widths.
+- [ ] Light and dark themes remain readable.
+
+### Assessment Lab
+
+- [ ] Diagnostic opens with correct sections and question counts.
+- [ ] Multiple-choice, typed-answer, sentence-order, reading, information-retrieval, listening, practical, and self-check items work.
+- [ ] No answer, explanation, breakdown, model answer, or listening transcript leaks before submission.
+- [ ] Previous/Next, section completion, and final submission work.
+- [ ] Section scores, total score, weak domains, review targets, and production completion are separated correctly.
+- [ ] Review answers, retake, latest/best history, and persisted history work.
+- [ ] Old state loads; reset removes assessment history as expected.
+- [ ] Layout works at 320/390px, tablet, desktop, light, and dark themes.
+
+### Days 21–40 grammar retrofit
+
+- [ ] Days 21, 24, 25, 26, 30, 31, 32, 35, 36, 38, 39, and 40 show Japanese, kana reading, romaji, and meaning.
+- [ ] Particle contexts display は → wa, を → o, and へ → e correctly.
+- [ ] Grammar breakdowns show word roles and authored morphology without future-form leakage.
+- [ ] Audio, speaking, writing, sentence ordering, and dictation routes appear in Daily Course.
+- [ ] Romaji On/Off, mobile layouts, and light/dark themes remain usable.
+
+### Writing practice
+
+#### Handwriting
+
+- [ ] Trace works with mouse and, where available, touch/stylus.
+- [ ] Clear and Start again work; drawing does not scroll the page.
+- [ ] Recall reference show/hide works.
+- [ ] Kanji reveal and Again/Okay/Comfortable self-rating work.
+- [ ] Canvas remains usable on high-DPI and narrow viewports.
+
+#### Typing and ordering
+
+- [ ] Correct and incorrect typed answers behave deterministically.
+- [ ] Whitespace normalization works; romaji is not silently accepted.
+- [ ] Japanese IME input works when enabled by the device.
+- [ ] Sentence-order units work by mouse, touch, and keyboard; Undo and Reset work.
+
+#### Dictation and free response
+
+- [ ] Dictation transcript is hidden before attempt, audio plays, answer checking and reveal work.
+- [ ] Analysis appears only after reveal/check.
+- [ ] Free response reveals a model and uses self-rating, without fake correctness.
+
+#### Writing state and responsive behavior
+
+- [ ] Writing metadata persists while canvas drawings do not.
+- [ ] Writing Lab works at approximately 320px, 390px, tablet, and desktop widths.
+- [ ] Light and dark themes remain readable with no horizontal overflow.

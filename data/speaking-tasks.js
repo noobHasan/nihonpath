@@ -1,0 +1,8 @@
+/* Gate 3 — small speaking/shadowing sample; legacy speaking[] remains unchanged. */
+var speakingTasksV2=[
+  {id:'speaking-day025-seven-oclock',type:'repeat',prompt:'Listen, then repeat the sentence aloud.',modelText:'七時に起きます。',analysisId:'analysis-day025-seven-oclock',audioId:'audio-day025-seven-oclock',role:'learner',hideTextInitially:false,required:false,reviewTargets:[{type:'grammar',id:'grammar-ni-time'}]},
+  {id:'speaking-day044-fitting-permission',type:'shadow',prompt:'Listen at both speeds, then shadow the permission question.',modelText:'試着してもいいですか。',analysisId:'analysis-day044-fitting-permission',audioId:'audio-day044-fitting-permission',role:'learner',hideTextInitially:false,required:false,reviewTargets:[{type:'grammar',id:'grammar-te-mo-ii-permission'}]},
+  {id:'speaking-day064-repeat-request',type:'repeat',prompt:'Ask politely for repetition.',modelText:'もう一度言ってください。',audioId:'audio-day064-repeat-request',role:'learner',hideTextInitially:false,required:false,reviewTargets:[{type:'grammar',id:'grammar-te-kudasai'}]},
+  {id:'speaking-day051-internet-problem',type:'role-play',prompt:'Tell a housing or utility staff member the practical problem.',modelText:'インターネットがつながりません。',audioId:'audio-day051-internet-problem',role:'learner',hideTextInitially:false,required:false,reviewTargets:[{type:'vocabulary',id:'vocab-internet'}]},
+  {id:'speaking-day070-coffee-like',type:'say-without-looking',prompt:'Listen first, try saying it, then reveal the Japanese if needed.',modelText:'コーヒーが好きです。',analysisId:'analysis-day070-coffee-like',audioId:'audio-day070-coffee-like',role:'learner',hideTextInitially:true,required:false,reviewTargets:[{type:'grammar',id:'grammar-suki'}]}
+];

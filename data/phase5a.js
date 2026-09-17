@@ -21,3 +21,5 @@ lessons[69].quiz.push({id:'n5-day-070-q11',type:'multiple-choice',skill:'prefere
 if(!vocab.some(function(v){return v.id==='vocab-amari'}))vocab.push({id:'vocab-amari',category:'Phase 5A',japanese:'あまり',reading:'あまり',romaji:'amari',meaning:'not very / not much (with a negative)',type:'adverb',example:'あまり好きではありません。',exampleEn:'I do not like it very much.'});
 lessons[69].vocabularyIds.push('vocab-amari');
 for(var fd=61;fd<=70;fd++)lessons[fd-1].status='reviewed';
+lessons[61].examples[3].analysisId='analysis-day062-iku-itte';
+lessons[69].examples[0].analysisId='analysis-day070-coffee-like';

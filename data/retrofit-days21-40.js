@@ -1,0 +1,24 @@
+/* Gate 8: explicit, reviewable enrichment for Days 21–40. */
+var day21to40Retrofit={
+21:{a:['analysis-day021-topic'],au:['audio-day021-topic'],s:['speaking-day021-topic'],w:['writing-day021-topic'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+22:{a:['analysis-day022-question'],au:['audio-day022-question'],s:['speaking-day022-question'],w:['writing-day022-question'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:true}},
+23:{a:['analysis-day023-possession'],au:['audio-day023-possession'],s:['speaking-day023-possession'],w:['writing-day023-possession'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+24:{a:['analysis-day024-object'],au:['audio-day024-object'],s:['speaking-day024-object'],w:['writing-day024-object'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:true}},
+25:{a:['analysis-day025-seven-oclock','analysis-day025-study-time'],au:['audio-day025-seven-oclock','audio-day025-study-time'],s:['speaking-day025-time'],w:['writing-day025-time'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:true}},
+26:{a:['analysis-day026-destination'],au:['audio-day026-destination'],s:['speaking-day026-destination'],w:['writing-day026-destination'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:true}},
+27:{a:['analysis-day027-action-location'],au:['audio-day027-action-location'],s:['speaking-day027-action-location'],w:['writing-day027-action-location'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:true}},
+28:{a:['analysis-day028-with-and'],au:['audio-day028-with-and'],s:['speaking-day028-with-and'],w:['writing-day028-with-and'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+29:{a:['analysis-day029-also'],au:['audio-day029-also'],s:['speaking-day029-also'],w:['writing-day029-also'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+30:{a:['analysis-day030-existence-object','analysis-day030-existence-person'],au:['audio-day030-existence'],s:['speaking-day030-existence'],w:['writing-day030-existence'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:true}},
+31:{a:['analysis-day031-verb-groups'],au:['audio-day031-verb-groups'],s:['speaking-day031-verb-groups'],w:['writing-day031-verb-groups'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+32:{a:['analysis-day032-present-polite'],au:['audio-day032-present-polite'],s:['speaking-day032-present-polite'],w:['writing-day032-present-polite'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+33:{a:['analysis-day033-negative-polite'],au:['audio-day033-negative-polite'],s:['speaking-day033-negative-polite'],w:['writing-day033-negative-polite'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+34:{a:['analysis-day034-past-polite'],au:['audio-day034-past-polite'],s:['speaking-day034-past-polite'],w:['writing-day034-past-polite'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+35:{a:['analysis-day035-past-negative'],au:['audio-day035-past-negative'],s:['speaking-day035-past-negative'],w:['writing-day035-past-negative'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+36:{a:['analysis-day036-i-adjective'],au:['audio-day036-i-adjective'],s:['speaking-day036-i-adjective'],w:['writing-day036-i-adjective'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+37:{a:['analysis-day037-na-adjective'],au:['audio-day037-na-adjective'],s:['speaking-day037-na-adjective'],w:['writing-day037-na-adjective'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+38:{a:['analysis-day038-adjective-forms'],au:['audio-day038-adjective-forms'],s:['speaking-day038-adjective-forms'],w:['writing-day038-adjective-forms'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:false}},
+39:{a:['analysis-day039-question-words'],au:['audio-day039-question-words'],s:['speaking-day039-question-words'],w:['writing-day039-question-words'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:true}},
+40:{a:['analysis-day040-foundations-checkpoint'],au:['audio-day040-foundations-checkpoint'],s:['speaking-day040-checkpoint'],w:['writing-day040-checkpoint'],t:{reading:true,writing:true,listening:true,speaking:true,grammar:true,practical:true}}
+};
+Object.keys(day21to40Retrofit).forEach(function(day){var l=lessons.find(function(x){return x.day===Number(day);}),r=day21to40Retrofit[day];if(l){l.analysisIds=r.a;l.audioIds=r.au;l.speakingTasks=r.s;l.writingTasks=r.w;l.skillTargets=r.t;}});

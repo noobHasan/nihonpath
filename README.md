@@ -15,6 +15,8 @@ Open `index.html` directly in a browser. No build step, server, package manager,
 
 The files use ordered classic scripts rather than ES modules or `fetch()`, preserving direct `file://` compatibility. The current lesson relationships and seeded content are intentionally preserved for the curriculum-authoring gate.
 
+Project brain / development roadmap: [docs/NIHON_PATH_MASTER_DEVELOPMENT_ROADMAP.md](docs/NIHON_PATH_MASTER_DEVELOPMENT_ROADMAP.md)
+
 ## Developer preview
 
 For local QA only, open the browser console and run `NIHON_PATH.dev.openLesson(25)` to preview a lesson without completing prior days or changing learner progress. This helper does not unlock lessons or write localStorage.

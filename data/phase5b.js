@@ -23,3 +23,5 @@ lessons[72].quiz[3]={id:'n5-day-073-q04',type:'multiple-choice',skill:'superlati
 /* 台 and 冊 remain recognition-only in Day 75; their quiz targets must be vocabulary, not 枚 grammar. */
 lessons[74].quiz.forEach(function(q){if(q.prompt==='Which fits a book volume?')q.reviewTargets=[{type:'vocabulary',id:'vocab-one-bookvolume'}];});
 for(var p5bReviewed=71;p5bReviewed<=80;p5bReviewed++)lessons[p5bReviewed-1].status='reviewed';
+lessons[72].examples[0].analysisId='analysis-day073-ichiban-cheap';
+lessons[79].examples[0].analysisId='analysis-day080-checkpoint-passage';

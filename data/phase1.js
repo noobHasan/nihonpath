@@ -81,3 +81,4 @@ var voicedKana=[['が','ga'],['ぎ','gi'],['ぐ','gu'],['げ','ge'],['ご','go']
 voicedKana.forEach(x=>{const id=`hiragana-${x[0]}`;if(!kana.some(k=>k.id===id))kana.push({id,script:'Hiragana',char:x[0],romaji:x[1]});});
 lessons[7].kanaIds=voicedKana.map(x=>`hiragana-${x[0]}`);
 for(let d=1;d<=10;d++) lessons[d-1].status='reviewed';
+lessons[5].examples[1].analysisId='analysis-day006-fifty-yen';
