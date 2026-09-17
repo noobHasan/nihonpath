@@ -8,10 +8,85 @@
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<aside class="side"><div class="brand"><div class="mark">日</div><div><b>NIHON PATH</b><small>N5 • LIFE IN JAPAN</small></div></div><div class="level"><span>Learning path</span><strong>N5 Foundation</strong></div><div class="group"><div class="glabel">Study</div><button class="nav active" data-page="dashboard">⌂ Dashboard</button><button class="nav" data-page="course">◫ Daily Course</button><button class="nav" data-page="kana">あ Kana</button><button class="nav" data-page="vocabulary">字 Vocabulary</button><button class="nav" data-page="kanji">漢 Kanji</button><button class="nav" data-page="grammar">文 Grammar</button></div><div class="group"><div class="glabel">Use Japanese</div><button class="nav" data-page="speaking">声 Speak Japanese</button><button class="nav" data-page="conversations">話 Conversations</button><button class="nav" data-page="life">日 Life in Japan</button><button class="nav" data-page="culture">礼 Culture & Etiquette</button><button class="nav" data-page="reading">読 Reading</button></div><div class="group"><div class="glabel">Train</div><button class="nav" data-page="practice">✓ Practice</button><button class="nav" data-page="review">↻ Review</button><button class="nav" data-page="progress">◒ Progress</button></div></aside>
-<main><header class="top"><div class="crumb"><b id="crumb">Dashboard</b> / JLPT N5</div><div class="actions"><button class="btn2" id="romaji">Romaji: Auto</button><button class="icon" id="theme">◐</button></div></header><div class="content"><section class="page active" id="dashboard"></section><section class="page" id="course"></section><section class="page" id="kana"></section><section class="page" id="vocabulary"></section><section class="page" id="kanji"></section><section class="page" id="grammar"></section><section class="page" id="speaking"></section><section class="page" id="conversations"></section><section class="page" id="life"></section><section class="page" id="culture"></section><section class="page" id="reading"></section><section class="page" id="practice"></section><section class="page" id="review"></section><section class="page" id="progress"></section></div></main>
-<nav class="mobile"><button class="mnav active" data-page="dashboard">Home</button><button class="mnav" data-page="course">Course</button><button class="mnav" data-page="vocabulary">Words</button><button class="mnav" data-page="practice">Practice</button><button class="mnav" data-page="review">Review</button></nav>
-<div class="modal" id="modal"><div class="modalBox" id="modalBox"></div></div><div class="toast" id="toast"></div>
+<div class="appShell">
+<div class="sidebarOverlay" id="sidebarOverlay" aria-hidden="true"></div>
+<aside class="side" id="sidebar">
+  <div class="brand">
+    <div class="mark" aria-hidden="true">日</div>
+    <div class="brandText">
+      <b class="brandTitle">NIHON PATH</b>
+      <small class="brandSubtitle">Japanese for Real Life</small>
+    </div>
+  </div>
+  <div class="level">
+    <span>Level</span>
+    <strong>JLPT N5 Foundation</strong>
+  </div>
+  <nav class="navGroups" aria-label="Main Navigation">
+    <div class="group">
+      <div class="glabel">Learn</div>
+      <button class="nav active" data-page="dashboard"><span class="navIcon" data-icon="dashboard"></span><span>Dashboard</span></button>
+      <button class="nav" data-page="course"><span class="navIcon" data-icon="course"></span><span>Daily Course</span></button>
+      <button class="nav" data-page="kana"><span class="navIcon" data-icon="kana"></span><span>Kana</span></button>
+      <button class="nav" data-page="vocabulary"><span class="navIcon" data-icon="vocabulary"></span><span>Vocabulary</span></button>
+      <button class="nav" data-page="kanji"><span class="navIcon" data-icon="kanji"></span><span>Kanji</span></button>
+      <button class="nav" data-page="grammar"><span class="navIcon" data-icon="grammar"></span><span>Grammar</span></button>
+    </div>
+    <div class="group">
+      <div class="glabel">Practice</div>
+      <button class="nav" data-page="speaking"><span class="navIcon" data-icon="speaking"></span><span>Speak Japanese</span></button>
+      <button class="nav" data-page="conversations"><span class="navIcon" data-icon="conversations"></span><span>Conversations</span></button>
+      <button class="nav" data-page="reading"><span class="navIcon" data-icon="reading"></span><span>Reading</span></button>
+      <button class="nav" data-page="practice"><span class="navIcon" data-icon="practice"></span><span>Practice & Lab</span></button>
+      <button class="nav" data-page="review"><span class="navIcon" data-icon="review"></span><span>Review</span></button>
+    </div>
+    <div class="group">
+      <div class="glabel">Explore</div>
+      <button class="nav" data-page="life"><span class="navIcon" data-icon="life"></span><span>Life in Japan</span></button>
+      <button class="nav" data-page="culture"><span class="navIcon" data-icon="culture"></span><span>Culture & Etiquette</span></button>
+      <button class="nav" data-page="progress"><span class="navIcon" data-icon="progress"></span><span>Progress</span></button>
+    </div>
+  </nav>
+</aside>
+<main class="mainContent">
+  <header class="top">
+    <div class="topHeadLeft">
+      <button class="icon menuBtn" id="menuToggle" aria-label="Toggle navigation"><span data-icon="menu"></span></button>
+      <div class="crumb"><b id="crumb">Dashboard</b> <span class="crumbDivider">/</span> <span class="crumbSub">JLPT N5</span></div>
+    </div>
+    <div class="actions">
+      <button class="btn2 romajiBtn" id="romaji">Romaji: Auto</button>
+      <button class="icon themeBtn" id="theme" aria-label="Toggle dark mode"><span data-icon="moon"></span></button>
+    </div>
+  </header>
+  <div class="content">
+    <section class="page active" id="dashboard"></section>
+    <section class="page" id="course"></section>
+    <section class="page" id="kana"></section>
+    <section class="page" id="vocabulary"></section>
+    <section class="page" id="kanji"></section>
+    <section class="page" id="grammar"></section>
+    <section class="page" id="speaking"></section>
+    <section class="page" id="conversations"></section>
+    <section class="page" id="life"></section>
+    <section class="page" id="culture"></section>
+    <section class="page" id="reading"></section>
+    <section class="page" id="practice"></section>
+    <section class="page" id="review"></section>
+    <section class="page" id="progress"></section>
+  </div>
+</main>
+</div>
+<nav class="mobile" aria-label="Mobile Navigation">
+  <button class="mnav active" data-page="dashboard"><span class="mnavIcon" data-icon="dashboard"></span><span>Home</span></button>
+  <button class="mnav" data-page="course"><span class="mnavIcon" data-icon="course"></span><span>Course</span></button>
+  <button class="mnav" data-page="practice"><span class="mnavIcon" data-icon="practice"></span><span>Practice</span></button>
+  <button class="mnav" data-page="review"><span class="mnavIcon" data-icon="review"></span><span>Review</span></button>
+  <button class="mnav" id="mobileMoreBtn" type="button"><span class="mnavIcon" data-icon="menu"></span><span>More</span></button>
+</nav>
+<div class="modal" id="modal"><div class="modalBox" id="modalBox"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script src="data/course.js"></script>
 <script src="data/kana.js"></script>
 <script src="data/vocabulary.js"></script>
@@ -33,6 +108,7 @@
 <script src="data/phase4b.js"></script>
 <script src="data/phase5a.js"></script>
 <script src="data/phase5b.js"></script>
+<script src="js/icons.js"></script>
 <script src="js/config.js"></script>
 <script src="js/state.js"></script>
 <script src="js/navigation.js"></script>

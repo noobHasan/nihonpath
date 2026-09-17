@@ -1,6 +1,222 @@
 function activityCount(map){return Object.values(map||{}).filter(function(x){return x&&x.completed;}).length;}
-function dash(){var s=stats(),l=lessons[s.day-1],weakCount=Object.values(state.quiz.by||{}).filter(function(x){return x.wrong>x.correct;}).length,speakingCount=activityCount(state.speakingPractice),writingCount=activityCount(state.writingPractice),assessments=Object.values(state.assessmentHistory||{}).reduce(function(n,x){return n+(Array.isArray(x)?x.length:0);},0);document.getElementById('dashboard').innerHTML=`<div class="eyebrow">Your Japanese path</div><h1 class="title">Welcome back.</h1><p class="lead">One clear next step every day. Build an N5 foundation, then reuse it in situations you will actually meet in Japan.</p><div class="hero"><div class="card heroMain"><span class="badge">DAY ${s.day} OF 90</span><h2>${E(l.title)}</h2><p>${E(l.focus)}</p><div class="tags"><span class="tag">${E(l.phase)}</span><span class="tag">10–25 min</span><span class="tag">${l.romaji?'Romaji support':'Kana-first'}</span></div><div class="rowActions"><button class="btn" onclick="selected=${s.day};go('course')">Continue lesson →</button><button class="btn2" onclick="go('review')">Review ${weakCount} weak items</button></div></div><div class="card heroSide"><div><div class="muted">Course progress</div><div class="big">${s.all}%</div><div class="track"><div class="fill" style="width:${s.all}%"></div></div></div><div class="muted" style="font-size:11px">Current streak: <b style="color:var(--text)">${state.streak} day${state.streak===1?'':'s'}</b></div></div></div><div class="sectionHead"><div><h2>Activity evidence</h2><p>Tracked practice, not proficiency percentages.</p></div></div><div class="grid stats"><div class="card stat"><div class="k">Course</div><div class="v">${s.days}/90</div><div class="s">days completed</div></div><div class="card stat"><div class="k">Speaking practice</div><div class="v">${speakingCount}/${(speakingTasksV2||[]).length}</div><div class="s">sample tasks practiced</div></div><div class="card stat"><div class="k">Writing practice</div><div class="v">${writingCount}/${(writingTasksV2||[]).length}</div><div class="s">sample tasks completed</div></div><div class="card stat"><div class="k">Assessments</div><div class="v">${assessments}</div><div class="s">diagnostic attempts</div></div></div><div class="rowActions dashboardActions"><button class="btn2" onclick="go('speaking')">Speaking Practice</button><button class="btn2" onclick="go('practice')">Writing Lab</button><button class="btn2" onclick="go('practice')">Diagnostic</button></div>`;}
-function kanaPage(){var cells=kana.filter(x=>x.script===kanaMode);document.getElementById('kana').innerHTML=`<div class="eyebrow">Reading system</div><h1 class="title">Kana</h1><p class="lead">Recognition first: use romaji as temporary support, then recall the kana itself. Writing practice lives in Practice → Writing Lab.</p><div class="kanaTabs"><button class="${kanaMode==='Hiragana'?'btn':'btn2'}" onclick="kanaMode='Hiragana';kanaPage()">Hiragana</button><button class="${kanaMode==='Katakana'?'btn':'btn2'}" onclick="kanaMode='Katakana';kanaPage()">Katakana</button><button class="btn2" onclick="quiz=buildKanaQuiz(10);go('practice')">Recognition quiz</button><button class="btn2" onclick="go('practice')">Writing Lab</button></div><h2 class="sectionTitle">Basic ${E(kanaMode)}</h2><div class="kanaGrid">${cells.map(k=>`<button class="kanaCell" aria-label="${E(k.char)}, ${E(k.romaji)}" onclick="openM('<div class=&quot;modalHead&quot;><div><div class=&quot;eyebrow&quot;>${k.script}</div><h2 class=&quot;jp&quot; style=&quot;font-size:60px;margin:0&quot;>${k.char}</h2><h3>${k.romaji}</h3><p>Recognition cue. For writing, open Writing Lab.</p></div><button class=&quot;close&quot; aria-label=&quot;Close&quot; onclick=&quot;closeM()&quot;>×</button></div>')"><div class="c jp">${k.char}</div><div class="r">${k.romaji}</div></button>`).join('')}</div><div class="sectionHead"><div><h2>Sound changes and combinations</h2><p>Read these after the basic kana set.</p></div></div><div class="grid two">${specialKana.map(x=>`<div class="card phase"><h3>${x[0]}</h3><div class="jp">${x[1]}</div><p>${x[2]}</p></div>`).join('')}</div>`;}
-function kanjiPage(){var items=kanji.filter(k=>`${k.kanji} ${k.meaning} ${k.onyomi} ${k.kunyomi}`.toLowerCase().includes(kquery.toLowerCase()));document.getElementById('kanji').innerHTML=`<div class="eyebrow">Core beginner recognition</div><h1 class="title">Kanji</h1><p class="lead">Learn readings through words. Recognition and writing are different skills; Writing Lab includes a self-check sample.</p><div class="toolbar"><div class="search"><input class="input" aria-label="Search kanji" placeholder="Search kanji or meaning…" value="${E(kquery)}" oninput="kquery=this.value;kanjiPage()"></div><button class="btn2" onclick="quiz=buildKanjiQuiz(10);go('practice')">Recognition quiz</button><button class="btn2" onclick="go('practice')">Writing Lab</button></div><div class="grid kgrid">${items.map(k=>{var on=state.klearn.includes(k.id);return `<div class="card kcard"><div class="kanji jp">${E(k.kanji)}</div><b>${E(k.meaning)}</b><div class="kline"><b>On:</b> ${E(k.onyomi)}</div><div class="kline"><b>Kun:</b> ${E(k.kunyomi)}</div><div class="kline"><b>Stroke count:</b> ${k.strokes}</div><div class="kline"><b>Word:</b> ${E(k.word)} ${E(k.wordReading)}</div><div class="meta">${E(k.mnemonic)}</div><div class="rowActions"><button class="tiny ${on?'on':''}" onclick="toggleK('${k.id}')">${on?'Recognized ✓':'Mark recognized'}</button></div></div>`}).join('')}</div>`;}
-function reviewPage(){var weakCount=Object.values(state.quiz.by||{}).filter(function(x){return x.wrong>x.correct;}).length,history=Object.values(state.assessmentHistory||{}).flat();document.getElementById('review').innerHTML=`<div class="eyebrow">Targeted review</div><h1 class="title">Review weak items</h1><p class="lead">These items are ranked from your wrong-versus-correct practice history. This is targeted review, not a full scheduled spaced-repetition system.</p><div class="grid reviewGrid"><div class="card review"><h3>Weak vocabulary</h3>${weakHtml(weak('v'),'v')}</div><div class="card review"><h3>Weak kanji</h3>${weakHtml(weak('k'),'k')}</div><div class="card review"><h3>Weak grammar</h3>${weakHtml(weak('g'),'g')}</div></div><div class="card review"><h3>Assessment evidence</h3>${history.length?history[history.length-1].weakDomains.map(function(x){return `<span class="tag">${E(x)}</span>`}).join(' '):'<div class="empty">Complete the Diagnostic in Practice to collect assessment evidence.</div>'}</div><div class="sectionHead"><div><h2>Recently learned</h2><p>Quick recall list.</p></div></div><div class="card review">${vocab.filter(v=>state.vstat[v.id]==='Learned').slice(-10).map(v=>`<span class="tag jp">${E(v.japanese)} ${E(v.meaning)}</span>`).join(' ')||'<div class="empty">Mark vocabulary as Learning or Learned to populate this section.</div>'}</div>`;}
-function progressPage(){var s=stats(),total=state.quiz.correct+state.quiz.wrong,spoken=activityCount(state.speakingPractice),written=activityCount(state.writingPractice),attempts=Object.values(state.assessmentHistory||{}).reduce(function(n,x){return n+(Array.isArray(x)?x.length:0);},0);document.getElementById('progress').innerHTML=`<div class="eyebrow">Local evidence</div><h1 class="title">Progress</h1><p class="lead">Course completion and learning evidence are shown separately. These figures are not proficiency or JLPT certification.</p><div class="grid stats"><div class="card stat"><div class="k">Course completion</div><div class="v">${s.days}/90</div><div class="s">${s.all}% of course days</div></div><div class="card stat"><div class="k">Quiz evidence</div><div class="v">${total}</div><div class="s">${state.quiz.correct} correct / ${state.quiz.wrong} wrong</div></div><div class="card stat"><div class="k">Speaking practice</div><div class="v">${spoken}/${(speakingTasksV2||[]).length}</div><div class="s">sample tasks practiced</div></div><div class="card stat"><div class="k">Writing practice</div><div class="v">${written}/${(writingTasksV2||[]).length}</div><div class="s">sample tasks completed</div></div><div class="card stat"><div class="k">Assessment attempts</div><div class="v">${attempts}</div><div class="s">internal diagnostic history</div></div><div class="card stat"><div class="k">Reading</div><div class="v">${state.read.length}/${readings.length}</div><div class="s">reading exercises</div></div></div><div class="sectionHead"><div><h2>N5 foundation checklist</h2><p>Guidance only; no readiness claim.</p></div></div><div class="checklist">${[['Hiragana',state.done.filter(x=>x<=10).length>=8],['Katakana',state.done.filter(x=>x>=11&&x<=20).length>=8],['Core vocabulary',s.v>=100],['N5 kanji',s.k>=60],['N5 grammar',s.g>=35],['Basic reading',state.read.length>=6]].map(x=>`<div class="check ${x[1]?'ok':''}"><span>${x[0]}</span><span>${x[1]?'✓':'○'}</span></div>`).join('')}</div><div class="sectionHead"><div><h2>Local data controls</h2><p>Reset erases this browser's study history.</p></div><button class="danger" onclick="resetAll()">Reset progress</button></div>`;}
+
+function dash(){
+  var s=stats(),
+      l=lessons[s.day-1],
+      weakCount=Object.values(state.quiz.by||{}).filter(function(x){return x.wrong>x.correct;}).length,
+      speakingCount=activityCount(state.speakingPractice),
+      writingCount=activityCount(state.writingPractice),
+      assessments=Object.values(state.assessmentHistory||{}).reduce(function(n,x){return n+(Array.isArray(x)?x.length:0);},0);
+  
+  document.getElementById('dashboard').innerHTML=`
+    <div class="eyebrow">Your Japanese path</div>
+    <h1 class="title">Welcome back.</h1>
+    <p class="lead">One clear next step every day. Build an N5 foundation, then reuse it in situations you will actually meet in Japan.</p>
+    <div class="hero">
+      <div class="card heroMain">
+        <div>
+          <span class="badge">DAY ${s.day} OF 90</span>
+          <h2>${E(l.title)}</h2>
+          <p>${E(l.focus)}</p>
+          <div class="tags">
+            <span class="tag">${E(l.phase)}</span>
+            <span class="tag">10–25 min</span>
+            <span class="tag">${l.romaji?'Romaji support':'Kana-first'}</span>
+          </div>
+        </div>
+        <div class="rowActions" style="margin-top:20px">
+          <button class="btn btnPrimary" onclick="selected=${s.day};go('course')">Continue lesson →</button>
+          <button class="btn2 btnSecondary" onclick="go('review')">Review ${weakCount} weak items</button>
+        </div>
+      </div>
+      <div class="card heroSide">
+        <div>
+          <div class="muted" style="font-weight:700">Course progress</div>
+          <div class="big">${s.all}%</div>
+          <div class="track"><div class="fill" style="width:${s.all}%"></div></div>
+        </div>
+        <div class="muted" style="font-size:12px;margin-top:16px">
+          Current streak: <b style="color:var(--color-text)">${state.streak} day${state.streak===1?'':'s'}</b>
+        </div>
+      </div>
+    </div>
+    <div class="sectionHead">
+      <div>
+        <h2>Activity evidence</h2>
+        <p>Tracked practice, not proficiency percentages.</p>
+      </div>
+    </div>
+    <div class="grid stats">
+      <div class="card stat"><div class="k">Course</div><div class="v">${s.days}/90</div><div class="s">days completed</div></div>
+      <div class="card stat"><div class="k">Speaking practice</div><div class="v">${speakingCount}/${(speakingTasksV2||[]).length}</div><div class="s">sample tasks practiced</div></div>
+      <div class="card stat"><div class="k">Writing practice</div><div class="v">${writingCount}/${(writingTasksV2||[]).length}</div><div class="s">sample tasks completed</div></div>
+      <div class="card stat"><div class="k">Assessments</div><div class="v">${assessments}</div><div class="s">diagnostic attempts</div></div>
+    </div>
+    <div class="rowActions dashboardActions">
+      <button class="btn2 btnSecondary" onclick="go('speaking')">Speaking Practice</button>
+      <button class="btn2 btnSecondary" onclick="go('practice')">Writing Lab</button>
+      <button class="btn2 btnSecondary" onclick="go('practice')">Diagnostic</button>
+    </div>
+  `;
+}
+
+function kanaPage(){
+  var cells=kana.filter(x=>x.script===kanaMode);
+  document.getElementById('kana').innerHTML=`
+    <div class="eyebrow">Reading system</div>
+    <h1 class="title">Kana</h1>
+    <p class="lead">Recognition first: use romaji as temporary support, then recall the kana itself. Writing practice lives in Practice → Writing Lab.</p>
+    <div class="kanaTabs">
+      <button class="${kanaMode==='Hiragana'?'btn btnPrimary':'btn2 btnSecondary'}" onclick="kanaMode='Hiragana';kanaPage()">Hiragana</button>
+      <button class="${kanaMode==='Katakana'?'btn btnPrimary':'btn2 btnSecondary'}" onclick="kanaMode='Katakana';kanaPage()">Katakana</button>
+      <button class="btn2 btnSecondary" onclick="quiz=buildKanaQuiz(10);go('practice')">Recognition quiz</button>
+      <button class="btn2 btnSecondary" onclick="go('practice')">Writing Lab</button>
+    </div>
+    <h2 class="sectionTitle" style="margin-bottom:14px">Basic ${E(kanaMode)}</h2>
+    <div class="kanaGrid">
+      ${cells.map(k=>`
+        <button class="kanaCell" aria-label="${E(k.char)}, ${E(k.romaji)}" onclick="openM('<div class=&quot;modalHead&quot;><div><div class=&quot;eyebrow&quot;>${k.script}</div><h2 class=&quot;jp&quot; style=&quot;font-size:64px;margin:4px 0 0&quot;>${k.char}</h2><h3 style=&quot;color:var(--color-indigo);margin:4px 0 12px&quot;>${k.romaji}</h3><p class=&quot;muted&quot;>Recognition cue. For writing, open Writing Lab.</p></div><button class=&quot;close&quot; aria-label=&quot;Close&quot; onclick=&quot;closeM()&quot;>×</button></div>')">
+          <div class="c jp">${k.char}</div>
+          <div class="r">${k.romaji}</div>
+        </button>
+      `).join('')}
+    </div>
+    <div class="sectionHead">
+      <div>
+        <h2>Sound changes and combinations</h2>
+        <p>Read these after the basic kana set.</p>
+      </div>
+    </div>
+    <div class="grid two">
+      ${specialKana.map(x=>`
+        <div class="card phase">
+          <h3>${x[0]}</h3>
+          <div class="jp" style="font-size:24px;font-weight:800;color:var(--color-primary);margin:6px 0">${x[1]}</div>
+          <p>${x[2]}</p>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function kanjiPage(){
+  var items=kanji.filter(k=>`${k.kanji} ${k.meaning} ${k.onyomi} ${k.kunyomi}`.toLowerCase().includes(kquery.toLowerCase()));
+  document.getElementById('kanji').innerHTML=`
+    <div class="eyebrow">Core beginner recognition</div>
+    <h1 class="title">Kanji</h1>
+    <p class="lead">Learn readings through words. Recognition and writing are different skills; Writing Lab includes a self-check sample.</p>
+    <div class="toolbar">
+      <div class="search">
+        <input class="input" aria-label="Search kanji" placeholder="Search kanji or meaning…" value="${E(kquery)}" oninput="kquery=this.value;kanjiPage()">
+      </div>
+      <button class="btn2 btnSecondary" onclick="quiz=buildKanjiQuiz(10);go('practice')">Recognition quiz</button>
+      <button class="btn2 btnSecondary" onclick="go('practice')">Writing Lab</button>
+    </div>
+    <div class="grid kgrid">
+      ${items.map(k=>{
+        var on=state.klearn.includes(k.id);
+        return `
+          <div class="card kcard">
+            <div class="kanji jp">${E(k.kanji)}</div>
+            <b style="font-size:16px">${E(k.meaning)}</b>
+            <div class="kline"><b>On:</b> ${E(k.onyomi)}</div>
+            <div class="kline"><b>Kun:</b> ${E(k.kunyomi)}</div>
+            <div class="kline"><b>Stroke count:</b> ${k.strokes}</div>
+            <div class="kline"><b>Word:</b> ${E(k.word)} ${E(k.wordReading)}</div>
+            <div class="meta" style="margin-top:6px">${E(k.mnemonic)}</div>
+            <div class="rowActions" style="margin-top:12px">
+              <button class="tiny ${on?'on':''}" onclick="toggleK('${k.id}')">${on?'Recognized ✓':'Mark recognized'}</button>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function reviewPage(){
+  var weakCount=Object.values(state.quiz.by||{}).filter(function(x){return x.wrong>x.correct;}).length,
+      history=Object.values(state.assessmentHistory||{}).flat();
+  document.getElementById('review').innerHTML=`
+    <div class="eyebrow">Targeted review</div>
+    <h1 class="title">Review weak items</h1>
+    <p class="lead">These items are ranked from your wrong-versus-correct practice history. This is targeted review, not a full scheduled spaced-repetition system.</p>
+    <div class="grid three">
+      <div class="card review" style="padding:20px">
+        <h3 style="font-size:17px;margin:0 0 10px">Weak vocabulary</h3>
+        ${weakHtml(weak('v'),'v')}
+      </div>
+      <div class="card review" style="padding:20px">
+        <h3 style="font-size:17px;margin:0 0 10px">Weak kanji</h3>
+        ${weakHtml(weak('k'),'k')}
+      </div>
+      <div class="card review" style="padding:20px">
+        <h3 style="font-size:17px;margin:0 0 10px">Weak grammar</h3>
+        ${weakHtml(weak('g'),'g')}
+      </div>
+    </div>
+    <div class="card review" style="padding:20px;margin-top:16px">
+      <h3 style="font-size:17px;margin:0 0 10px">Assessment evidence</h3>
+      ${history.length?history[history.length-1].weakDomains.map(function(x){return `<span class="tag" style="margin-right:6px">${E(x)}</span>`}).join(' '):'<div class="muted" style="padding:16px;border:1px dashed var(--color-border);border-radius:var(--radius-md);text-align:center">Complete the Diagnostic in Practice to collect assessment evidence.</div>'}
+    </div>
+    <div class="sectionHead">
+      <div>
+        <h2>Recently learned</h2>
+        <p>Quick recall list.</p>
+      </div>
+    </div>
+    <div class="card review" style="padding:20px">
+      ${vocab.filter(v=>state.vstat[v.id]==='Learned').slice(-10).map(v=>`<span class="tag jp" style="margin:4px 6px 4px 0">${E(v.japanese)} ${E(v.meaning)}</span>`).join(' ') || '<div class="muted" style="padding:16px;border:1px dashed var(--color-border);border-radius:var(--radius-md);text-align:center">Mark vocabulary as Learning or Learned to populate this section.</div>'}
+    </div>
+  `;
+}
+
+function progressPage(){
+  var s=stats(),
+      total=state.quiz.correct+state.quiz.wrong,
+      spoken=activityCount(state.speakingPractice),
+      written=activityCount(state.writingPractice),
+      attempts=Object.values(state.assessmentHistory||{}).reduce(function(n,x){return n+(Array.isArray(x)?x.length:0);},0);
+  
+  document.getElementById('progress').innerHTML=`
+    <div class="eyebrow">Local evidence</div>
+    <h1 class="title">Progress</h1>
+    <p class="lead">Course completion and learning evidence are shown separately. These figures are not proficiency or JLPT certification.</p>
+    <div class="grid stats">
+      <div class="card stat"><div class="k">Course completion</div><div class="v">${s.days}/90</div><div class="s">${s.all}% of course days</div></div>
+      <div class="card stat"><div class="k">Quiz evidence</div><div class="v">${total}</div><div class="s">${state.quiz.correct} correct / ${state.quiz.wrong} wrong</div></div>
+      <div class="card stat"><div class="k">Speaking practice</div><div class="v">${spoken}/${(speakingTasksV2||[]).length}</div><div class="s">sample tasks practiced</div></div>
+      <div class="card stat"><div class="k">Writing practice</div><div class="v">${written}/${(writingTasksV2||[]).length}</div><div class="s">sample tasks completed</div></div>
+      <div class="card stat"><div class="k">Assessment attempts</div><div class="v">${attempts}</div><div class="s">internal diagnostic history</div></div>
+      <div class="card stat"><div class="k">Reading</div><div class="v">${state.read.length}/${readings.length}</div><div class="s">reading exercises</div></div>
+    </div>
+    <div class="sectionHead">
+      <div>
+        <h2>N5 foundation checklist</h2>
+        <p>Guidance only; no readiness claim.</p>
+      </div>
+    </div>
+    <div class="grid two">
+      ${[
+        ['Hiragana',state.done.filter(x=>x<=10).length>=8],
+        ['Katakana',state.done.filter(x=>x>=11&&x<=20).length>=8],
+        ['Core vocabulary',s.v>=100],
+        ['N5 kanji',s.k>=60],
+        ['N5 grammar',s.g>=35],
+        ['Basic reading',state.read.length>=6]
+      ].map(x=>`
+        <div class="card" style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-weight:650">${x[0]}</span>
+          <span style="color:var(--color-${x[1]?'success':'text-tertiary'});font-weight:800">${x[1]?'✓ Completed':'○ Pending'}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="sectionHead">
+      <div>
+        <h2>Local data controls</h2>
+        <p>Reset erases this browser's study history.</p>
+      </div>
+      <button class="danger" onclick="resetAll()">Reset progress</button>
+    </div>
+  `;
+}
