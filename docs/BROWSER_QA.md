@@ -188,11 +188,37 @@ The Codex In-app Browser was selected on the macOS host. Browser version was not
 
 Requested manual widths 320, 390, 768, 1024, and 1440 and automated overflow widths 360, 430, 820, 1280, and 1920 remain untested. Existing checkboxes above intentionally remain unchecked.
 
-Only this QA document was modified during the attempt; no learner data, application code, Git staging, commits, pushes, branches, or history were changed. Gate 13 retains its previously verified **COMPLETE FOR V1** status, without a fresh regression claim. Gate 14 remains **NOT READY** pending an authorized browser environment that permits the required file deployment testing or user-performed browser QA. Gate 15 was not started.
+Only this QA document was modified during the Codex attempt; no learner data, application code, Git staging, commits, pushes, branches, or history were changed. Gate 13 retains its previously verified **COMPLETE FOR V1** status. The blocked Codex attempt is historical; the user-performed Chrome evidence below is the authoritative Gate 14 release evidence.
+
+## Gate 14 — User-performed manual Chrome QA (accepted evidence)
+
+**Environment:** Chrome on macOS.
+
+**Evidence source:** user-reported manual PASS. Codex did not perform these browser checks; the Codex `file://` attempt above remained blocked by tool URL policy.
+
+The user reported PASS for:
+
+- Day 1 → Day 2 unlock and refresh persistence.
+- Dev Preview, major pages, existing audio, Speaking recording, Writing, and Assessments.
+- Romaji controls, light/dark themes, and mobile UI.
+- Console uncaught application errors: **0**.
+
+After the Learning Surface repair, the user additionally reported PASS for:
+
+- Kana audio and focused practice.
+- Vocabulary audio and focused practice.
+- Kanji Details, example-word audio, focused practice, and writing self-check.
+- Grammar example audio and focused practice.
+- Life phrase audio and Reading passage audio.
+- Quick Practice categories, lesson-item practice, and Lesson quiz.
+- Writing, Speaking, and Assessment regression checks.
+- Console uncaught application errors: **0**.
+
+This evidence supports representative browser flows and core progression. It does not claim that Codex opened all 90 lessons individually in a browser; all 90 lessons are covered by the source/static smoke audit below.
 
 ## Learning Surface Completeness (manual follow-up)
 
-This repair adds learner routes but still requires manual Chrome verification. Do not mark these checks complete from the static audit:
+The following focused checks are covered by the user-reported manual PASS above; the checklist remains as a repeatable regression matrix:
 
 - Kana: open three characters and verify Details, Listen/Slow, and Practice.
 - Vocabulary: open three words and verify Details, audio, and Practice.
@@ -202,8 +228,8 @@ This repair adds learner routes but still requires manual Chrome verification. D
 - Reading: play two passages.
 - Practice: verify Quick Practice, Writing Lab, and Assessment modes; confirm Lesson quiz and focused item practice visibly show the quiz.
 
-The source-composed audit reports complete routes and registry coverage, but Codex has not browser-tested these interactions. Playback remains browser Japanese TTS unless a native asset exists; kanji writing is a self-check without automatic scoring.
+The source-composed audit reports complete routes and registry coverage. Playback remains browser Japanese TTS unless a native asset exists; kanji writing is a self-check without automatic scoring.
 
-Current static audit snapshot (2026-09-18): Kana 142, Vocabulary 377, Kanji 91, Grammar 105, Life phrases 44, Reading passages 8; all have validated audio routes, focused builders cover every item, and all 91 kanji have Details and example-word audio. This does not change the blocked browser status above.
+Current static audit snapshot (2026-09-19): Kana 142, Vocabulary 377, Kanji 91, Grammar 105, Life phrases 44, Reading passages 8; all have validated audio routes, focused builders cover every item, and all 91 kanji have Details and example-word audio.
 
-The project checkpoint supplied for this repair records a separate accepted manual Gate 14 pass for the redesigned V1 UI (fresh unlock flow, refresh persistence, dev preview, major pages, existing audio, speaking, writing, assessments, Romaji, themes, mobile UI, and zero console errors). That user-provided result predates this learning-surface repair; the new library routes still need the focused Chrome checks listed above.
+The user-provided checkpoint records the accepted manual Gate 14 pass for the redesigned V1 UI and the post-repair learning-surface follow-up. Keep the evidence distinction above when reporting release status.

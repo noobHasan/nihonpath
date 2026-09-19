@@ -174,6 +174,7 @@ function renderSpeakingRecording(taskId){
 }
 
 function renderAudioControls(audioId){
+  if(!audioId || (typeof getAudioTarget==='function' && !getAudioTarget(audioId)))return '';
   var playIcon = typeof getIconSvg === 'function' ? getIconSvg('play', 12) : '';
   var slowIcon = typeof getIconSvg === 'function' ? getIconSvg('turtle', 14) : '';
   var stopIcon = typeof getIconSvg === 'function' ? getIconSvg('square', 10) : '';

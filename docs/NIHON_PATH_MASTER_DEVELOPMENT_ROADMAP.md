@@ -985,15 +985,15 @@ Audit Days 81–90 and cross-course sequencing 1–90.
 
 Vocabulary, grammar, kanji, conversations, speaking, reading, life, culture.
 
-### Gate 14 — Browser/device QA
+### Gate 14 — Browser/device QA — **COMPLETE — user-performed manual Chrome QA**
 
 Execute the full manual matrix.
 
-### Gate 15 — Release assessment
+### Gate 15 — Release assessment — **COMPLETE — READY FOR V1 FREEZE**
 
 Run fresh-user, old-state, weak-topic, mock, Day 90, and reset scenarios.
 
-### Gate 16 — V1 freeze
+### Gate 16 — V1 freeze — **NEXT — V1 FREEZE**
 
 - Update docs.
 - Confirm 90 reviewed.
@@ -1073,11 +1073,11 @@ The 90-day Daily Course remains the V1 product core. The standalone Conversation
 
 V1 requires canonical-only standalone rendering, complete canonical metadata and useful required analyses, exact audio references, no hidden-source leakage, all Day 1–90 references resolving, and unchanged curriculum validation/readability. This amendment supersedes any historical all-lines-enriched release prerequisite; historical audits remain intact.
 
-Current Gate 13C result: **NOT READY**. Filtering and source separation pass, but 17 accepted canonical required analyses still copy Japanese surfaces into token meanings. They require a bounded content repair before Gate 13 can be COMPLETE FOR V1. See [Gate 13C audit](FULL_LIBRARY_AUDIT.md#gate-13c--v1-conversation-scope-closure). Browser QA remains **NOT PERFORMED**; Gate 14 — Real Browser / Device QA has not started.
+Historical Gate 13C result: **NOT READY**. Filtering and source separation passed, but 17 accepted canonical required analyses still copied Japanese surfaces into token meanings. That finding was closed by Gate 13C1 below. See [Gate 13C audit](FULL_LIBRARY_AUDIT.md#gate-13c--v1-conversation-scope-closure).
 
 
 ### Gate 13C1 — V1 analysis closure
 
 Gate 13 is now **COMPLETE FOR V1** under the approved 24-conversation / 75-line standalone scope. The 17 generic required analyses were repaired in place; all 37 required analyses now resolve and are useful, with zero generic shells. Twenty existing required analyses also received missing references to their already-valid line audio targets. Registry accounting remains 150 + 0 - 0 = 150. Curriculum, Day 89, assessments, source references, filtering, and readability regressions pass.
 
-The earlier Gate 13C NOT READY finding above is retained as history and superseded by [Gate 13C1](FULL_LIBRARY_AUDIT.md#gate-13c1--canonical-analysis-repair). Full 59/185 enrichment remains deferred; the 35/110 backlog remains hidden from the standalone page and available in source. Browser QA is still **NOT PERFORMED**. Next: **Gate 14 — Real Browser / Device QA**, as a separate task.
+The earlier Gate 13C NOT READY finding above is retained as history and superseded by [Gate 13C1](FULL_LIBRARY_AUDIT.md#gate-13c1--canonical-analysis-repair). Full 59/185 enrichment remains deferred; the 35/110 backlog remains hidden from the standalone page and available in source. Gate 14 is complete from the user-performed Chrome evidence recorded in [Browser QA](BROWSER_QA.md), and Gate 15 is complete from [the V1 release assessment](V1_RELEASE_ASSESSMENT.md). Gate 16 is next.
