@@ -189,3 +189,21 @@ The Codex In-app Browser was selected on the macOS host. Browser version was not
 Requested manual widths 320, 390, 768, 1024, and 1440 and automated overflow widths 360, 430, 820, 1280, and 1920 remain untested. Existing checkboxes above intentionally remain unchecked.
 
 Only this QA document was modified during the attempt; no learner data, application code, Git staging, commits, pushes, branches, or history were changed. Gate 13 retains its previously verified **COMPLETE FOR V1** status, without a fresh regression claim. Gate 14 remains **NOT READY** pending an authorized browser environment that permits the required file deployment testing or user-performed browser QA. Gate 15 was not started.
+
+## Learning Surface Completeness (manual follow-up)
+
+This repair adds learner routes but still requires manual Chrome verification. Do not mark these checks complete from the static audit:
+
+- Kana: open three characters and verify Details, Listen/Slow, and Practice.
+- Vocabulary: open three words and verify Details, audio, and Practice.
+- Kanji: open five characters and verify Details, example-word audio, Practice, and writing self-check.
+- Grammar: open three patterns and verify example audio and Practice.
+- Life in Japan: play three phrases.
+- Reading: play two passages.
+- Practice: verify Quick Practice, Writing Lab, and Assessment modes; confirm Lesson quiz and focused item practice visibly show the quiz.
+
+The source-composed audit reports complete routes and registry coverage, but Codex has not browser-tested these interactions. Playback remains browser Japanese TTS unless a native asset exists; kanji writing is a self-check without automatic scoring.
+
+Current static audit snapshot (2026-09-18): Kana 142, Vocabulary 377, Kanji 91, Grammar 105, Life phrases 44, Reading passages 8; all have validated audio routes, focused builders cover every item, and all 91 kanji have Details and example-word audio. This does not change the blocked browser status above.
+
+The project checkpoint supplied for this repair records a separate accepted manual Gate 14 pass for the redesigned V1 UI (fresh unlock flow, refresh persistence, dev preview, major pages, existing audio, speaking, writing, assessments, Romaji, themes, mobile UI, and zero console errors). That user-provided result predates this learning-surface repair; the new library routes still need the focused Chrome checks listed above.

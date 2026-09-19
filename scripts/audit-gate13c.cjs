@@ -25,7 +25,7 @@ for(const name of ['audioTargets','japaneseAnalyses']) {
 }
 const ids=Array.from(run('conversations.flatMap(c=>c.lines).filter(l=>l.id).map(l=>l.id)'));
 assert.equal(new Set(ids).size,ids.length,'Duplicate source line IDs');
-assert.equal(report.audioTargetCount,209);assert.equal(report.analysisCount,150);
+assert.ok(report.audioTargetCount>=209,'Accepted conversation audio targets were removed');assert.equal(report.analysisCount,150);
 assert.equal(report.dailyConversationReferencesResolved,38);assert.equal(report.dailyConversationReferencesMissing,0);
 assert.equal(report.standaloneAudioCoveredCount,75);assert.equal(report.linesWithJapaneseScriptInRomaji,0);
 assert.equal(report.linesWithExactlyOneClassification,75);

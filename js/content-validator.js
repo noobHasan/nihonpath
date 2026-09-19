@@ -76,10 +76,34 @@ function validateContent() {
   var d86=lessons[85],d87=lessons[86];if(!d86.listeningItems||d86.listeningItems.length<5)report.errors.push('Day 86 requires at least 5 listening items');if(!d86.shadowingTasks||d86.shadowingTasks.length<3)report.errors.push('Day 86 requires at least 3 shadowing tasks');if(!d87.marathonScenarios||d87.marathonScenarios.length<5)report.errors.push('Day 87 requires at least 5 marathon scenarios');if(d87.marathonScenarios&&!['INITIATE','RESPOND','RECOVER'].every(m=>d87.marathonScenarios.some(x=>x.mode===m)))report.errors.push('Day 87 marathon must cover initiate/respond/recover');if(d86.listeningItems){report.listeningItemCount=d86.listeningItems.length;report.listeningAudioTargetCount=d86.listeningItems.filter(x=>audioSet.has(x.audioId)).length;report.listeningQuestionCount=d86.listeningItems.length;report.shadowingTaskCount=(d86.shadowingTasks||[]).length;report.itemsWithTranscriptHiddenInitially=d86.listeningItems.filter(x=>x.transcriptPolicy==='hidden-until-reveal').length;report.itemsWithNaturalRate=d86.listeningItems.filter(x=>getAudioTarget(x.audioId)&&getAudioTarget(x.audioId).naturalRate).length;report.itemsWithSlowRate=d86.listeningItems.filter(x=>getAudioTarget(x.audioId)&&getAudioTarget(x.audioId).slowRate).length;}
   var day87Ids=new Set((lessons[86]&&lessons[86].marathonScenarios||[]).map(function(s){return s.id;}));var day87Tasks=(lessons[86]&&lessons[86].speakingTasks||[]).filter(function(id){return day87Ids.has(id);}).map(function(id){return(speakingTasksV2||[]).find(function(t){return t.id===id;});}).filter(function(t){return t&&t.type==='role-play';});day87Tasks.forEach(function(t){if(!t.mode||!['INITIATE','RESPOND','RECOVER'].includes(t.mode))report.errors.push('Day 87 role-play requires explicit valid mode: '+t.id);['modelText','reading','romaji','meaning','speaker','scenario','audioId'].forEach(function(f){if(!t[f])report.errors.push('Day 87 role-play missing '+f+': '+t.id);});if(t.audioId&&(!audioSet.has(t.audioId)||getAudioTarget(t.audioId).text.trim()!==t.modelText.trim()))report.errors.push('Day 87 role-play audio mismatch: '+t.id);});report.day87LineCount=day87Tasks.length;report.day87LinesWithReading=day87Tasks.filter(function(t){return t.reading;}).length;report.day87LinesWithRomaji=day87Tasks.filter(function(t){return t.romaji;}).length;report.day87LinesWithMeaning=day87Tasks.filter(function(t){return t.meaning;}).length;report.day87LinesWithAudio=day87Tasks.filter(function(t){return t.audioId&&audioSet.has(t.audioId);}).length;
   validateStandaloneConversations(report, sets, audioSet, analysisSet);
+  validateLearningSurfaceContract(report);
   const allDays = auditDailyCourseReadability(90, 1);
   report.fullCourseReadability = allDays;
   if (allDays.itemsWithReading !== allDays.dailyCourseItemCount || allDays.itemsWithRomaji !== allDays.dailyCourseItemCount || allDays.itemsWithMeaning !== allDays.dailyCourseItemCount || allDays.kanjiItemsWithWholeWordReading !== allDays.kanjiItemCount || allDays.analysisCoveredCount !== allDays.analysisRequiredCount) report.errors.push('Days 1–90 Daily Course readability coverage is incomplete');
   const result = report.errors.length ? report : { ...report, ok: true }; console.info('[Nihon Path] Content validation', result); return result;
+}
+
+function validateLearningSurfaceContract(report) {
+  const target = id => id && getAudioTarget(id);
+  const goodQuestion = q => q && q.key && Array.isArray(q.options) && q.options.length >= 2 && new Set(q.options).size === q.options.length && q.options.filter(x => x === q.answer).length === 1;
+  const groups = [
+    ['kana', kana || [], 'libraryAudioId'],
+    ['vocabulary', vocab || [], 'libraryAudioId'],
+    ['kanji', kanji || [], 'libraryAudioId'],
+    ['grammar', grammar || [], 'libraryAudioId']
+  ];
+  groups.forEach(([name, items, audioField]) => items.forEach(item => {
+    if (!target(item[audioField])) report.errors.push(`${name} missing library audio: ${item.id}`);
+  }));
+  (kanji || []).forEach(k => { const a = target(k.libraryAudioId); if (!a || a.text !== k.word) report.errors.push(`kanji example audio mismatch: ${k.id}`); if (typeof kanjiDetails !== 'function' || !String(kanjiDetails(k)).includes('Kanji details')) report.errors.push(`kanji details missing: ${k.id}`); if (typeof buildFocusedKanjiQuiz !== 'function' || !buildFocusedKanjiQuiz(k.id).qs.length) report.errors.push(`kanji focused practice missing: ${k.id}`); });
+  (life || []).forEach((m, mi) => (m.phrases || []).forEach((p, pi) => { if (!target(p.libraryAudioId)) report.errors.push(`life phrase missing library audio: ${mi}/${pi}`); }));
+  (readings || []).forEach(r => { if (!target(r.libraryAudioId)) report.errors.push(`reading passage missing library audio: ${r.id}`); });
+  const focused = [['kana', kana, buildFocusedKanaQuiz], ['vocabulary', vocab, buildFocusedVocabularyQuiz], ['kanji', kanji, buildFocusedKanjiQuiz], ['grammar', grammar, buildFocusedGrammarQuiz]];
+  focused.forEach(([name, items, builder]) => { if (typeof builder !== 'function') { report.errors.push(`focused ${name} builder missing`); return; } items.forEach(item => { const q = builder(item.id); if (!q || !q.qs || !q.qs.length || q.qs.some(x => !goodQuestion(x))) report.errors.push(`focused ${name} practice invalid: ${item.id}`); }); });
+  const detailItems = [].concat((kana || []).slice(0, 3).map(k => ({japanese:k.char, kind:'kana', sourceId:k.id, audioId:k.libraryAudioId, romaji:k.romaji})), (vocab || []).slice(0, 3).map(v => ({japanese:v.japanese, kind:'vocabulary', sourceId:v.id, audioId:v.libraryAudioId, reading:v.reading, romaji:v.romaji, meaning:v.meaning})), (kanji || []).slice(0, 3).map(k => ({japanese:k.word, kind:'kanji', sourceId:k.id, audioId:k.libraryAudioId, reading:k.wordReading})), (grammar || []).slice(0, 3).map(g => ({japanese:g.pattern, kind:'grammar', sourceId:g.id, audioId:g.libraryAudioId, meaning:g.meaning})));
+  if (typeof renderLearningItem === 'function') detailItems.forEach(item => { const rendered = renderLearningItem(item); if (!rendered || !rendered.includes('Details') || rendered.replace(/<[^>]+>/g, '').trim().length < 20) report.errors.push(`empty learning item Details: ${item.kind}/${item.sourceId}`); });
+  report.librarySurfaceAudioTargetCount = (audioTargets || []).length;
+  report.librarySurfaceFocusedBuilders = {kana:(kana || []).length, vocabulary:(vocab || []).length, kanji:(kanji || []).length, grammar:(grammar || []).length};
 }
 
 function validateStandaloneConversations(report, sets, audioSet, analysisSet) {
